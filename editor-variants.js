@@ -146,7 +146,7 @@ $('#add-method').onclick=()=>{
  let number=editorVariants.length+1,name='计算方法'+number;
  while(editorVariants.some(variant=>variant.name===name))name='计算方法'+(++number);
  editorVariants.push({
-  name,title:source.title,titleEn:'',formulas:[],lineRelations:[],note:'',symbols:[],basis:'',derivation:'',references:[]
+  name,title:source.title,titleEn:source.titleEn,formulas:[],lineRelations:[],note:'',symbols:[],basis:'',derivation:'',references:[]
  });
  editorVariantIndex=editorVariants.length-1;
  refreshVariantSelector();
@@ -163,3 +163,4 @@ $('#remove-method').onclick=()=>{
  writeVisibleVariant(editorVariants[editorVariantIndex]);
  $('#edit-form').scrollTop=0;
 };
+
