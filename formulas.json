@@ -1,0 +1,2938 @@
+{
+  "version": "Fan-2025-paper-and-supplement-A",
+  "moduleOrder": [
+    "算力任务与负荷",
+    "可再生能源",
+    "燃气转换",
+    "氢能转换",
+    "热与冷转换",
+    "多能储能",
+    "不确定性与场景",
+    "优化调度"
+  ],
+  "catalog": [
+    {
+      "name": "算力任务与负荷",
+      "submodels": [
+        "任务表征与时间窗",
+        "服务器电耗与冷却"
+      ]
+    },
+    {
+      "name": "可再生能源",
+      "submodels": [
+        "光伏",
+        "风机"
+      ]
+    },
+    {
+      "name": "燃气转换",
+      "submodels": [
+        "燃气轮机",
+        "P2G 与甲烷化",
+        "燃气锅炉"
+      ]
+    },
+    {
+      "name": "氢能转换",
+      "submodels": [
+        "氢燃料电池"
+      ]
+    },
+    {
+      "name": "热与冷转换",
+      "submodels": [
+        "空气源热泵",
+        "吸收式热泵",
+        "有机朗肯循环",
+        "余热锅炉"
+      ]
+    },
+    {
+      "name": "多能储能",
+      "submodels": [
+        "通用储能模型"
+      ]
+    },
+    {
+      "name": "不确定性与场景",
+      "submodels": [
+        "源荷概率分布"
+      ]
+    },
+    {
+      "name": "优化调度",
+      "submodels": [
+        "随机优化框架",
+        "购能与弃电成本",
+        "碳排放与配额",
+        "设备运行约束",
+        "多能流平衡",
+        "任务迁移约束"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "1",
+      "sourceTag": "1",
+      "title": "计算任务参数",
+      "module": "算力任务与负荷",
+      "submodel": "任务表征与时间窗",
+      "section": "正文 式 (1)",
+      "latex": "CT_i=\\{at_i,pt_i,dt_i,W_i\\}",
+      "formulas": [
+        "CT_i=\\{at_i,pt_i,dt_i,W_i\\}"
+      ],
+      "description": "用到达时间、处理时长、截止时间和处理量描述第 i 项计算任务。",
+      "note": "用到达时间、处理时长、截止时间和处理量描述第 i 项计算任务。",
+      "symbols": [
+        {
+          "raw": "CT_i",
+          "latex": "CT_i",
+          "meaning": "第 i 项计算任务",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "the i-th computation task"
+        },
+        {
+          "raw": "at_i",
+          "latex": "at_i",
+          "meaning": "到达时间",
+          "unit": "\\mathrm{h}",
+          "bounds": [],
+          "meaningEn": "arriving time"
+        },
+        {
+          "raw": "pt_i",
+          "latex": "pt_i",
+          "meaning": "处理时长",
+          "unit": "\\mathrm{h}",
+          "bounds": [],
+          "meaningEn": "processing time"
+        },
+        {
+          "raw": "dt_i",
+          "latex": "dt_i",
+          "meaning": "截止时间",
+          "unit": "\\mathrm{h}",
+          "bounds": [],
+          "meaningEn": "deadline time"
+        },
+        {
+          "raw": "W_i",
+          "latex": "W_i",
+          "meaning": "任务处理量或占用服务器数",
+          "unit": "\\text{台}",
+          "bounds": [],
+          "meaningEn": "processing amount"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (1)。正文 §2.2；任务处理量对应服务器占用。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "computation task"
+    },
+    {
+      "id": "5",
+      "sourceTag": "5",
+      "title": "任务可调度时间窗",
+      "module": "算力任务与负荷",
+      "submodel": "任务表征与时间窗",
+      "section": "正文 式 (5)",
+      "latex": "R_i=n\\Delta t=dt_i-at_i",
+      "formulas": [
+        "R_i=n\\Delta t=dt_i-at_i"
+      ],
+      "description": "计算任务可调整的时间范围。",
+      "note": "计算任务可调整的时间范围。",
+      "symbols": [
+        {
+          "raw": "R_i",
+          "latex": "R_i",
+          "meaning": "第 i 项任务可调度范围",
+          "unit": "\\mathrm{h}",
+          "bounds": [],
+          "meaningEn": "scheduling ranges"
+        },
+        {
+          "raw": "n",
+          "latex": "n",
+          "meaning": "可调度系数",
+          "unit": "—",
+          "bounds": [
+            "n\\in\\{0,1,2,3\\}"
+          ],
+          "meaningEn": "schedulable coefficient"
+        },
+        {
+          "raw": "\\Delta t",
+          "latex": "\\Delta t",
+          "meaning": "调度时间步长",
+          "unit": "\\mathrm{h}",
+          "bounds": [],
+          "meaningEn": "scheduling time"
+        },
+        {
+          "raw": "dt_i",
+          "latex": "dt_i",
+          "meaning": "截止时间",
+          "unit": "\\mathrm{h}",
+          "bounds": [],
+          "meaningEn": "deadline time"
+        },
+        {
+          "raw": "at_i",
+          "latex": "at_i",
+          "meaning": "到达时间",
+          "unit": "\\mathrm{h}",
+          "bounds": [],
+          "meaningEn": "arriving time"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (5)。正文采用 1 h 调度步长。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "1"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "scheduling ranges"
+    },
+    {
+      "id": "6",
+      "sourceTag": "6",
+      "title": "长中短任务处理时长",
+      "module": "算力任务与负荷",
+      "submodel": "任务表征与时间窗",
+      "section": "正文 式 (6)",
+      "latex": "pt_{\\mathrm{LTT}}=2\\Delta t",
+      "formulas": [
+        "pt_{\\mathrm{LTT}}=2\\Delta t",
+        "pt_{\\mathrm{MTT}}=\\Delta t",
+        "pt_{\\mathrm{STT}}=0.5\\Delta t"
+      ],
+      "description": "给出长、中、短时任务的处理时长。",
+      "note": "给出长、中、短时任务的处理时长。",
+      "symbols": [
+        {
+          "raw": "pt_{\\mathrm{LTT}}",
+          "latex": "pt_{\\mathrm{LTT}}",
+          "meaning": "长时任务处理时长",
+          "unit": "\\mathrm{h}",
+          "bounds": [],
+          "meaningEn": "long-term task (LTT)"
+        },
+        {
+          "raw": "pt_{\\mathrm{MTT}}",
+          "latex": "pt_{\\mathrm{MTT}}",
+          "meaning": "中时任务处理时长",
+          "unit": "\\mathrm{h}",
+          "bounds": [],
+          "meaningEn": "medium-term task (MTT)"
+        },
+        {
+          "raw": "pt_{\\mathrm{STT}}",
+          "latex": "pt_{\\mathrm{STT}}",
+          "meaning": "短时任务处理时长",
+          "unit": "\\mathrm{h}",
+          "bounds": [],
+          "meaningEn": "short-term task (STT)"
+        },
+        {
+          "raw": "\\Delta t",
+          "latex": "\\Delta t",
+          "meaning": "调度时间步长",
+          "unit": "\\mathrm{h}",
+          "bounds": [],
+          "meaningEn": "scheduling time"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (6)。正文 §2.2；三式分别为 LTT、MTT、STT。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "1",
+        "5"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "processing time"
+    },
+    {
+      "id": "2",
+      "sourceTag": "2",
+      "title": "服务器任务电耗",
+      "module": "算力任务与负荷",
+      "submodel": "服务器电耗与冷却",
+      "section": "正文 式 (2)",
+      "latex": "E_{\\mathrm{ser},i}=u_{\\mathrm{ser},i}(E_{\\mathrm{ser,max}}-E_{\\mathrm{ser},0})+E_{\\mathrm{ser},0}",
+      "formulas": [
+        "E_{\\mathrm{ser},i}=u_{\\mathrm{ser},i}(E_{\\mathrm{ser,max}}-E_{\\mathrm{ser},0})+E_{\\mathrm{ser},0}"
+      ],
+      "description": "按任务占用率在服务器基础电耗与最大电耗之间插值。",
+      "note": "按任务占用率在服务器基础电耗与最大电耗之间插值。",
+      "symbols": [
+        {
+          "raw": "E_{\\mathrm{ser},i}",
+          "latex": "E_{\\mathrm{ser},i}",
+          "meaning": "任务 i 的服务器用电需求",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "electricity demand to process CTi"
+        },
+        {
+          "raw": "u_{\\mathrm{ser},i}",
+          "latex": "u_{\\mathrm{ser},i}",
+          "meaning": "任务 i 占用率",
+          "unit": "—",
+          "bounds": [
+            "0\\le u_{\\mathrm{ser},i}\\le 1"
+          ],
+          "meaningEn": "occupancy rate of CTi"
+        },
+        {
+          "raw": "E_{\\mathrm{ser,max}}",
+          "latex": "E_{\\mathrm{ser,max}}",
+          "meaning": "服务器最大用电需求",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "maximum electricity consumption of servers"
+        },
+        {
+          "raw": "E_{\\mathrm{ser},0}",
+          "latex": "E_{\\mathrm{ser},0}",
+          "meaning": "服务器基础用电需求",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "basic electricity consumption of servers"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (2)。正文引用其参考文献 [26]。原文以 E 记载功率量，页面保留原符号。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "1"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "consumed power"
+    },
+    {
+      "id": "3",
+      "sourceTag": "3",
+      "title": "任务服务器占用率",
+      "module": "算力任务与负荷",
+      "submodel": "服务器电耗与冷却",
+      "section": "正文 式 (3)",
+      "latex": "u_{\\mathrm{ser},i}=\\frac{W_i}{N_{\\mathrm{ser}}u_{\\mathrm{DC}}}",
+      "formulas": [
+        "u_{\\mathrm{ser},i}=\\frac{W_i}{N_{\\mathrm{ser}}u_{\\mathrm{DC}}}"
+      ],
+      "description": "根据任务处理量和可用服务器容量计算占用率。",
+      "note": "根据任务处理量和可用服务器容量计算占用率。",
+      "symbols": [
+        {
+          "raw": "u_{\\mathrm{ser},i}",
+          "latex": "u_{\\mathrm{ser},i}",
+          "meaning": "任务 i 占用率",
+          "unit": "—",
+          "bounds": [
+            "0\\le u_{\\mathrm{ser},i}\\le 1"
+          ],
+          "meaningEn": "occupancy rate of CTi"
+        },
+        {
+          "raw": "W_i",
+          "latex": "W_i",
+          "meaning": "任务处理量或占用服务器数",
+          "unit": "\\text{台}",
+          "bounds": [],
+          "meaningEn": "processing amount"
+        },
+        {
+          "raw": "N_{\\mathrm{ser}}",
+          "latex": "N_{\\mathrm{ser}}",
+          "meaning": "服务器总数",
+          "unit": "\\text{台}",
+          "bounds": [],
+          "meaningEn": "total number of servers"
+        },
+        {
+          "raw": "u_{\\mathrm{DC}}",
+          "latex": "u_{\\mathrm{DC}}",
+          "meaning": "数据中心服务器使用率",
+          "unit": "—",
+          "bounds": [
+            "u_{\\mathrm{DC}}<0.9",
+            "0\\le u_{\\mathrm{DC}}\\le 1"
+          ],
+          "meaningEn": "usage rate of server cluster in data center"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (3)。正文说明服务器使用率控制在 90% 以下。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "1"
+      ],
+      "parent": "2",
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "occupancy rate"
+    },
+    {
+      "id": "4",
+      "sourceTag": "4",
+      "title": "任务冷却需求",
+      "module": "算力任务与负荷",
+      "submodel": "服务器电耗与冷却",
+      "section": "正文 式 (4)",
+      "latex": "Q_{c,\\mathrm{ser},i}=\\eta_{e,c}E_{\\mathrm{ser},i}",
+      "formulas": [
+        "Q_{c,\\mathrm{ser},i}=\\eta_{e,c}E_{\\mathrm{ser},i}"
+      ],
+      "description": "由任务电耗估算服务器冷却负荷。",
+      "note": "由任务电耗估算服务器冷却负荷。",
+      "symbols": [
+        {
+          "raw": "Q_{c,\\mathrm{ser},i}",
+          "latex": "Q_{c,\\mathrm{ser},i}",
+          "meaning": "任务 i 冷却需求",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "cold demand for cooling the server"
+        },
+        {
+          "raw": "\\eta_{e,c}",
+          "latex": "\\eta_{e,c}",
+          "meaning": "电耗到冷负荷的换算系数",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "conversion coefficient of electricity consumption to cold load"
+        },
+        {
+          "raw": "E_{\\mathrm{ser},i}",
+          "latex": "E_{\\mathrm{ser},i}",
+          "meaning": "任务 i 的服务器用电需求",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "electricity demand to process CTi"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (4)。正文 §2.2。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "2"
+      ],
+      "parent": "2",
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "cold demand"
+    },
+    {
+      "id": "A-PV",
+      "sourceTag": "A-PV",
+      "title": "光伏出力与电池板温度",
+      "module": "可再生能源",
+      "submodel": "光伏",
+      "section": "补充文档 Appendix A, (1) Photovoltaic, 前两式",
+      "latex": "E_{\\mathrm{PV}}=fN_{\\mathrm{PV}}\\frac{G_p}{G_{\\mathrm{stc}}}[1+\\alpha(T_{\\mathrm{pv},p}-T_{\\mathrm{pv,stc}})]",
+      "formulas": [
+        "E_{\\mathrm{PV}}=fN_{\\mathrm{PV}}\\frac{G_p}{G_{\\mathrm{stc}}}[1+\\alpha(T_{\\mathrm{pv},p}-T_{\\mathrm{pv,stc}})]",
+        "T_{\\mathrm{pv},p}=\\frac{T_{a,p}+(T_{\\mathrm{pv,soc}}-T_{\\mathrm{a,soc}})\\frac{G_p}{G_{\\mathrm{soc}}}\\left[1-\\frac{\\eta_{e,\\mathrm{pv}}(1-\\alpha T_{\\mathrm{pv,stc}})}{\\tau\\beta}\\right]}{1+(T_{\\mathrm{pv,soc}}-T_{\\mathrm{a,soc}})\\frac{G_p}{G_{\\mathrm{soc}}}\\frac{\\alpha\\eta_{e,\\mathrm{pv}}}{\\tau\\beta}}"
+      ],
+      "description": "根据辐照度和板温计算光伏出力；板温由环境条件估计。",
+      "note": "根据辐照度和板温计算光伏出力；板温由环境条件估计。",
+      "symbols": [
+        {
+          "raw": "E_{\\mathrm{PV}}",
+          "latex": "E_{\\mathrm{PV}}",
+          "meaning": "光伏发电功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "PV power generation"
+        },
+        {
+          "raw": "f",
+          "latex": "f",
+          "meaning": "功率降额系数",
+          "unit": "—",
+          "bounds": [
+            "0\\le f\\le 1"
+          ],
+          "meaningEn": "power derating coefficient of the photovoltaic unit"
+        },
+        {
+          "raw": "N_{\\mathrm{PV}}",
+          "latex": "N_{\\mathrm{PV}}",
+          "meaning": "光伏安装容量",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "installed capacity of the photovoltaic panel"
+        },
+        {
+          "raw": "G_p",
+          "latex": "G_p",
+          "meaning": "当地辐照度",
+          "unit": "\\mathrm{kW}/\\mathrm{m}^{2}",
+          "bounds": [],
+          "meaningEn": "local solar radiation intensity"
+        },
+        {
+          "raw": "G_{\\mathrm{stc}}",
+          "latex": "G_{\\mathrm{stc}}",
+          "meaning": "标准测试辐照度",
+          "unit": "\\mathrm{kW}/\\mathrm{m}^{2}",
+          "bounds": [
+            "G_{\\mathrm{stc}}=1\\,\\mathrm{kW/m^2}"
+          ],
+          "meaningEn": "solar radiation density under the standard test environment"
+        },
+        {
+          "raw": "\\alpha",
+          "latex": "\\alpha",
+          "meaning": "光伏温度系数",
+          "unit": "\\%/{}^{\\circ}\\mathrm{C}",
+          "bounds": [],
+          "meaningEn": "temperature coefficient"
+        },
+        {
+          "raw": "T_{\\mathrm{pv},p}",
+          "latex": "T_{\\mathrm{pv},p}",
+          "meaning": "电池板表面温度",
+          "unit": "{}^{\\circ}\\mathrm{C}",
+          "bounds": [],
+          "meaningEn": "surface temperature of the photovoltaic panel"
+        },
+        {
+          "raw": "T_{\\mathrm{pv,stc}}",
+          "latex": "T_{\\mathrm{pv,stc}}",
+          "meaning": "标准测试板温",
+          "unit": "{}^{\\circ}\\mathrm{C}",
+          "bounds": [
+            "T_{\\mathrm{pv,stc}}=25\\,^{\\circ}\\mathrm C"
+          ],
+          "meaningEn": "temperature of photovoltaic power generation panel under standard test environment"
+        },
+        {
+          "raw": "T_{a,p}",
+          "latex": "T_{a,p}",
+          "meaning": "环境温度",
+          "unit": "{}^{\\circ}\\mathrm{C}",
+          "bounds": [],
+          "meaningEn": "ambient temperature"
+        },
+        {
+          "raw": "T_{\\mathrm{pv,soc}}",
+          "latex": "T_{\\mathrm{pv,soc}}",
+          "meaning": "标准运行条件板温",
+          "unit": "{}^{\\circ}\\mathrm{C}",
+          "bounds": [
+            "45\\,^{\\circ}\\mathrm C\\le T_{\\mathrm{pv,soc}}\\le48\\,^{\\circ}\\mathrm C"
+          ],
+          "meaningEn": "surface temperature of photovoltaic power generation under standard working conditions"
+        },
+        {
+          "raw": "T_{\\mathrm{a,soc}}",
+          "latex": "T_{\\mathrm{a,soc}}",
+          "meaning": "标准运行条件环境温度",
+          "unit": "{}^{\\circ}\\mathrm{C}",
+          "bounds": [
+            "T_{\\mathrm{a,soc}}=20\\,^{\\circ}\\mathrm C"
+          ],
+          "meaningEn": "standard ambient temperature"
+        },
+        {
+          "raw": "G_{\\mathrm{soc}}",
+          "latex": "G_{\\mathrm{soc}}",
+          "meaning": "标准运行条件辐照度",
+          "unit": "\\mathrm{kW}/\\mathrm{m}^{2}",
+          "bounds": [
+            "G_{\\mathrm{soc}}=0.8\\,\\mathrm{kW/m^2}"
+          ],
+          "meaningEn": "standard solar radiation intensity"
+        },
+        {
+          "raw": "\\eta_{e,\\mathrm{pv}}",
+          "latex": "\\eta_{e,\\mathrm{pv}}",
+          "meaning": "标准测试光伏效率",
+          "unit": "—",
+          "bounds": [
+            "0\\le \\eta_{e,\\mathrm{pv}}\\le 1"
+          ],
+          "meaningEn": "PV efficiency under standard test environment"
+        },
+        {
+          "raw": "\\tau",
+          "latex": "\\tau",
+          "meaning": "盖板太阳透射率",
+          "unit": "—",
+          "bounds": [
+            "0\\le \\tau\\le 1"
+          ],
+          "meaningEn": "solar transmittance of the PV cover"
+        },
+        {
+          "raw": "\\beta",
+          "latex": "\\beta",
+          "meaning": "太阳能吸收率",
+          "unit": "—",
+          "bounds": [
+            "\\beta=0.9",
+            "0\\le \\beta\\le 1"
+          ],
+          "meaningEn": "solar energy absorption rate"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）补充文档 Appendix A, (1) Photovoltaic, 前两式。第二式是第一式中板温的计算方法。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466. Supplementary material, Appendix A, Appendix A, (1) Photovoltaic, 前两式."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [
+        {
+          "index": 1,
+          "role": "dependent",
+          "label": "板温计算"
+        }
+      ],
+      "titleEn": "PV power generation"
+    },
+    {
+      "id": "A-WT",
+      "sourceTag": "A-WT",
+      "title": "风机分段出力",
+      "module": "可再生能源",
+      "submodel": "风机",
+      "section": "补充文档 Appendix A, (2) Wind turbine, 分段式",
+      "latex": "E_{\\mathrm{wt}}^{\\prime}=\\begin{cases}0,&V<V_{\\mathrm{ci}}\\\\aV^3-bE_r,&V_{\\mathrm{ci}}<V<V_{\\mathrm{co}}\\\\P_r,&V_r<V<V_{\\mathrm{co}}\\\\0,&V_{\\mathrm{co}}<V\\end{cases}",
+      "formulas": [
+        "E_{\\mathrm{wt}}^{\\prime}=\\begin{cases}0,&V<V_{\\mathrm{ci}}\\\\aV^3-bE_r,&V_{\\mathrm{ci}}<V<V_{\\mathrm{co}}\\\\P_r,&V_r<V<V_{\\mathrm{co}}\\\\0,&V_{\\mathrm{co}}<V\\end{cases}"
+      ],
+      "description": "以切入、额定和切出风速分段表示风电出力。",
+      "note": "以切入、额定和切出风速分段表示风电出力。",
+      "symbols": [
+        {
+          "raw": "E_{\\mathrm{wt}}^{\\prime}",
+          "latex": "E_{\\mathrm{wt}}^{\\prime}",
+          "meaning": "风机输出功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "power output of wind turbines"
+        },
+        {
+          "raw": "V",
+          "latex": "V",
+          "meaning": "轮毂风速",
+          "unit": "\\mathrm{m}/\\mathrm{s}",
+          "bounds": [],
+          "meaningEn": "wind speed at the wheel hub level"
+        },
+        {
+          "raw": "V_{\\mathrm{ci}}",
+          "latex": "V_{\\mathrm{ci}}",
+          "meaning": "切入风速",
+          "unit": "\\mathrm{m}/\\mathrm{s}",
+          "bounds": [],
+          "meaningEn": "access wind speed"
+        },
+        {
+          "raw": "V_r",
+          "latex": "V_r",
+          "meaning": "额定风速",
+          "unit": "\\mathrm{m}/\\mathrm{s}",
+          "bounds": [],
+          "meaningEn": "rated wind speed"
+        },
+        {
+          "raw": "V_{\\mathrm{co}}",
+          "latex": "V_{\\mathrm{co}}",
+          "meaning": "切出风速",
+          "unit": "\\mathrm{m}/\\mathrm{s}",
+          "bounds": [],
+          "meaningEn": "cut-off wind speed"
+        },
+        {
+          "raw": "a",
+          "latex": "a",
+          "meaning": "风机曲线参数",
+          "unit": "—",
+          "bounds": []
+        },
+        {
+          "raw": "b",
+          "latex": "b",
+          "meaning": "风机曲线参数",
+          "unit": "—",
+          "bounds": []
+        },
+        {
+          "raw": "E_r",
+          "latex": "E_r",
+          "meaning": "额定功率符号之一",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "rated power of the wind turbine"
+        },
+        {
+          "raw": "P_r",
+          "latex": "P_r",
+          "meaning": "额定功率符号之二",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "rated power of the wind turbine"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）补充文档 Appendix A, (2) Wind turbine, 分段式。按原文图式转录；未擅自改写分段边界和 E_r/P_r 记号。\n原文待核对：第二段 V_ci<V<V_co 与第三段 V_r<V<V_co 重叠，且 E_r/P_r 两种额定功率记号并用；建议对照作者原始模型。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466. Supplementary material, Appendix A, Appendix A, (2) Wind turbine, 分段式."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "sourceWarning": "第二段 V_ci<V<V_co 与第三段 V_r<V<V_co 重叠，且 E_r/P_r 两种额定功率记号并用；建议对照作者原始模型。",
+      "titleEn": "power output of wind turbines"
+    },
+    {
+      "id": "A-GT",
+      "sourceTag": "A-GT",
+      "title": "燃气轮机电热转换",
+      "module": "燃气转换",
+      "submodel": "燃气轮机",
+      "section": "补充文档 Appendix A, (3) Gas turbine, 四式",
+      "latex": "E_{\\mathrm{gt}}(t)=\\nu\\eta_{\\mathrm{gt}}^eF_{\\mathrm{gt}}(t)",
+      "formulas": [
+        "E_{\\mathrm{gt}}(t)=\\nu\\eta_{\\mathrm{gt}}^eF_{\\mathrm{gt}}(t)",
+        "Q_{\\mathrm{gt}}(t)=\\nu\\eta_{\\mathrm{gt}}^hF_{\\mathrm{gt}}(t)"
+      ],
+      "description": "燃气轮机消耗天然气并产生电力和余热；限制输入及爬坡。",
+      "note": "燃气轮机消耗天然气并产生电力和余热；限制输入及爬坡。",
+      "symbols": [
+        {
+          "raw": "E_{\\mathrm{gt}}",
+          "latex": "E_{\\mathrm{gt}}",
+          "meaning": "燃机发电功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "power generation of the gas turbine"
+        },
+        {
+          "raw": "Q_{\\mathrm{gt}}",
+          "latex": "Q_{\\mathrm{gt}}",
+          "meaning": "燃机余热功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "waste heat utilization of exhaust gas"
+        },
+        {
+          "raw": "F_{\\mathrm{gt}}",
+          "latex": "F_{\\mathrm{gt}}",
+          "meaning": "燃机天然气输入功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [
+            "F_{\\mathrm{gt}}^{\\min}\\le F_{\\mathrm{gt}}(t)\\le F_{\\mathrm{gt}}^{\\max}"
+          ],
+          "meaningEn": "natural gas consumed by GT"
+        },
+        {
+          "raw": "F_{\\mathrm{gt}}^{\\min}",
+          "latex": "F_{\\mathrm{gt}}^{\\min}",
+          "meaning": "燃机最小天然气输入功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "lower limits of the input power of GT"
+        },
+        {
+          "raw": "F_{\\mathrm{gt}}^{\\max}",
+          "latex": "F_{\\mathrm{gt}}^{\\max}",
+          "meaning": "燃机最大天然气输入功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "upper limits of the input power of GT"
+        },
+        {
+          "raw": "\\eta_{\\mathrm{gt}}^e",
+          "latex": "\\eta_{\\mathrm{gt}}^e",
+          "meaning": "燃机发电转换效率",
+          "unit": "—",
+          "bounds": [
+            "0\\le \\eta_{\\mathrm{gt}}^e\\le 1"
+          ],
+          "meaningEn": "power generation conversion efficiency"
+        },
+        {
+          "raw": "\\eta_{\\mathrm{gt}}^h",
+          "latex": "\\eta_{\\mathrm{gt}}^h",
+          "meaning": "燃机余热转换效率",
+          "unit": "—",
+          "bounds": [
+            "0\\le \\eta_{\\mathrm{gt}}^h\\le 1"
+          ],
+          "meaningEn": "waste heat conversion efficiency"
+        },
+        {
+          "raw": "\\nu",
+          "latex": "\\nu",
+          "meaning": "燃机耗气占总耗气的比例",
+          "unit": "—",
+          "bounds": [
+            "0\\le \\nu\\le 1"
+          ],
+          "meaningEn": "ratio of the natural gas energy consumed by the gas turbine to the total consumption"
+        },
+        {
+          "raw": "\\Delta F_{\\mathrm{gt}}",
+          "latex": "\\Delta F_{\\mathrm{gt}}",
+          "meaning": "燃机天然气输入爬坡量",
+          "unit": "\\mathrm{kW}/\\text{步}",
+          "bounds": [
+            "\\Delta F_{\\mathrm{gt}}^{\\min}\\le F_{\\mathrm{gt}}(t+1)-F_{\\mathrm{gt}}(t)\\le\\Delta F_{\\mathrm{gt}}^{\\max}"
+          ],
+          "meaningEn": "GT climbing power"
+        },
+        {
+          "raw": "\\Delta F_{\\mathrm{gt}}^{\\min}",
+          "latex": "\\Delta F_{\\mathrm{gt}}^{\\min}",
+          "meaning": "燃机最小爬坡变化",
+          "unit": "\\mathrm{kW}/\\text{步}",
+          "bounds": [],
+          "meaningEn": "lower limits of GT climbing power"
+        },
+        {
+          "raw": "\\Delta F_{\\mathrm{gt}}^{\\max}",
+          "latex": "\\Delta F_{\\mathrm{gt}}^{\\max}",
+          "meaning": "燃机最大爬坡变化",
+          "unit": "\\mathrm{kW}/\\text{步}",
+          "bounds": [],
+          "meaningEn": "upper limits of GT climbing power"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）补充文档 Appendix A, (3) Gas turbine, 四式。原文后两式是输入功率与爬坡约束，已放入参数取值范围。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466. Supplementary material, Appendix A, Appendix A, (3) Gas turbine, 四式."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "Gas turbine (GT)"
+    },
+    {
+      "id": "A-P2G",
+      "sourceTag": "A-P2G",
+      "title": "P2G 产气与 CO₂ 消耗",
+      "module": "燃气转换",
+      "submodel": "P2G 与甲烷化",
+      "section": "补充文档 Appendix A, (4) Power to gas, 三式",
+      "latex": "F_{\\mathrm{P2G}}^{\\mathrm{Gas}}(t)=\\eta_{\\mathrm{P2G}}E_{\\mathrm{P2G}}^e(t)",
+      "formulas": [
+        "F_{\\mathrm{P2G}}^{\\mathrm{Gas}}(t)=\\eta_{\\mathrm{P2G}}E_{\\mathrm{P2G}}^e(t)",
+        "V_{\\mathrm{CO}_2}(t)=V_{\\mathrm{Gas}}(t)=\\frac{3.6F_{\\mathrm{P2G}}^{\\mathrm{Gas}}(t)}{H_g}",
+        "F_{\\mathrm{P2G}}^{\\mathrm{CO}_2}(t)=\\rho_{\\mathrm{CO}_2}V_{\\mathrm{CO}_2}(t)"
+      ],
+      "description": "把 P2G 输入电功率映射为天然气能量、产气体积和 CO₂ 消耗量。",
+      "note": "把 P2G 输入电功率映射为天然气能量、产气体积和 CO₂ 消耗量。",
+      "symbols": [
+        {
+          "raw": "F_{\\mathrm{P2G}}^{\\mathrm{Gas}}",
+          "latex": "F_{\\mathrm{P2G}}^{\\mathrm{Gas}}",
+          "meaning": "P2G 天然气输出功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "output power of P2G natural gas"
+        },
+        {
+          "raw": "E_{\\mathrm{P2G}}^e",
+          "latex": "E_{\\mathrm{P2G}}^e",
+          "meaning": "P2G 输入电功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "electrical power input of P2G"
+        },
+        {
+          "raw": "\\eta_{\\mathrm{P2G}}",
+          "latex": "\\eta_{\\mathrm{P2G}}",
+          "meaning": "P2G 转换效率",
+          "unit": "—",
+          "bounds": [
+            "0\\le \\eta_{\\mathrm{P2G}}\\le 1"
+          ],
+          "meaningEn": "conversion efficiency of P2G"
+        },
+        {
+          "raw": "V_{\\mathrm{CO}_2}",
+          "latex": "V_{\\mathrm{CO}_2}",
+          "meaning": "消耗 CO₂ 体积",
+          "unit": "\\mathrm{m}^{3}/\\text{时段}",
+          "bounds": [],
+          "meaningEn": "volumes of CO2 absorption"
+        },
+        {
+          "raw": "V_{\\mathrm{Gas}}",
+          "latex": "V_{\\mathrm{Gas}}",
+          "meaning": "生成天然气体积",
+          "unit": "\\mathrm{m}^{3}/\\text{时段}",
+          "bounds": [],
+          "meaningEn": "volumes of natural gas generation by P2G"
+        },
+        {
+          "raw": "H_g",
+          "latex": "H_g",
+          "meaning": "天然气热值",
+          "unit": "\\mathrm{MJ}/\\mathrm{m}^{3}",
+          "bounds": [
+            "H_g=39\\,\\mathrm{MJ/m^3}"
+          ],
+          "meaningEn": "heating value of natural gas"
+        },
+        {
+          "raw": "F_{\\mathrm{P2G}}^{\\mathrm{CO}_2}",
+          "latex": "F_{\\mathrm{P2G}}^{\\mathrm{CO}_2}",
+          "meaning": "消耗 CO₂ 质量",
+          "unit": "\\mathrm{kg}/\\text{时段}",
+          "bounds": [],
+          "meaningEn": "mass of CO2 absorbed by P2G"
+        },
+        {
+          "raw": "\\rho_{\\mathrm{CO}_2}",
+          "latex": "\\rho_{\\mathrm{CO}_2}",
+          "meaning": "CO₂ 密度",
+          "unit": "\\mathrm{kg}/\\mathrm{m}^{3}",
+          "bounds": [],
+          "meaningEn": "density of CO2"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）补充文档 Appendix A, (4) Power to gas, 三式。原文以 3.6 做 kWh 与 MJ 换算；具体时间步长应与式中功率、体积一致。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466. Supplementary material, Appendix A, Appendix A, (4) Power to gas, 三式."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "A-GT"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [
+        {
+          "index": 1,
+          "role": "dependent",
+          "label": "产气与耗 CO₂ 的体积换算"
+        },
+        {
+          "index": 2,
+          "role": "dependent",
+          "label": "CO₂ 质量换算"
+        }
+      ],
+      "titleEn": "Power to gas (P2G)"
+    },
+    {
+      "id": "A-FC",
+      "sourceTag": "A-FC",
+      "title": "氢燃料电池电热转换",
+      "module": "氢能转换",
+      "submodel": "氢燃料电池",
+      "section": "补充文档 Appendix A, (5) Fuel cell, 四式",
+      "latex": "E_{\\mathrm{HFC}}(t)=\\eta_{\\mathrm{HFC}}^eF_{\\mathrm{H}_2,\\mathrm{HFC}}(t)",
+      "formulas": [
+        "E_{\\mathrm{HFC}}(t)=\\eta_{\\mathrm{HFC}}^eF_{\\mathrm{H}_2,\\mathrm{HFC}}(t)",
+        "Q_{\\mathrm{HFC}}(t)=\\eta_{\\mathrm{HFC}}^hF_{\\mathrm{H}_2,\\mathrm{HFC}}(t)"
+      ],
+      "description": "氢燃料电池消耗氢能并输出电与热；限制氢输入和爬坡。",
+      "note": "氢燃料电池消耗氢能并输出电与热；限制氢输入和爬坡。",
+      "symbols": [
+        {
+          "raw": "E_{\\mathrm{HFC}}",
+          "latex": "E_{\\mathrm{HFC}}",
+          "meaning": "燃料电池发电功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "electrical power output of HFC"
+        },
+        {
+          "raw": "Q_{\\mathrm{HFC}}",
+          "latex": "Q_{\\mathrm{HFC}}",
+          "meaning": "燃料电池热功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "thermal power output of HFC"
+        },
+        {
+          "raw": "F_{\\mathrm{H}_2,\\mathrm{HFC}}",
+          "latex": "F_{\\mathrm{H}_2,\\mathrm{HFC}}",
+          "meaning": "燃料电池氢能输入功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [
+            "F_{\\mathrm{H}_2,\\mathrm{HFC}}^{\\min}\\le F_{\\mathrm{H}_2,\\mathrm{HFC}}(t)\\le F_{\\mathrm{H}_2,\\mathrm{HFC}}^{\\max}"
+          ],
+          "meaningEn": "hydrogen power of HFC input"
+        },
+        {
+          "raw": "F_{\\mathrm{H}_2,\\mathrm{HFC}}^{\\min}",
+          "latex": "F_{\\mathrm{H}_2,\\mathrm{HFC}}^{\\min}",
+          "meaning": "燃料电池最小氢输入功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "lower limits of the input power of HFC"
+        },
+        {
+          "raw": "F_{\\mathrm{H}_2,\\mathrm{HFC}}^{\\max}",
+          "latex": "F_{\\mathrm{H}_2,\\mathrm{HFC}}^{\\max}",
+          "meaning": "燃料电池最大氢输入功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "upper limits of the input power of HFC"
+        },
+        {
+          "raw": "\\eta_{\\mathrm{HFC}}^e",
+          "latex": "\\eta_{\\mathrm{HFC}}^e",
+          "meaning": "燃料电池发电效率",
+          "unit": "—",
+          "bounds": [
+            "0\\le \\eta_{\\mathrm{HFC}}^e\\le 1"
+          ],
+          "meaningEn": "power generation efficiency of HFC equipment"
+        },
+        {
+          "raw": "\\eta_{\\mathrm{HFC}}^h",
+          "latex": "\\eta_{\\mathrm{HFC}}^h",
+          "meaning": "燃料电池供热效率",
+          "unit": "—",
+          "bounds": [
+            "0\\le \\eta_{\\mathrm{HFC}}^h\\le 1"
+          ],
+          "meaningEn": "heating efficiency of HFC equipment"
+        },
+        {
+          "raw": "\\Delta F_{\\mathrm{H}_2,\\mathrm{HFC}}",
+          "latex": "\\Delta F_{\\mathrm{H}_2,\\mathrm{HFC}}",
+          "meaning": "氢输入爬坡量",
+          "unit": "\\mathrm{kW}/\\text{步}",
+          "bounds": [
+            "\\Delta F_{\\mathrm{H}_2,\\mathrm{HFC}}^{\\min}\\le F_{\\mathrm{H}_2,\\mathrm{HFC}}(t+1)-F_{\\mathrm{H}_2,\\mathrm{HFC}}(t)\\le\\Delta F_{\\mathrm{H}_2,\\mathrm{HFC}}^{\\max}"
+          ],
+          "meaningEn": "HFC climbing power"
+        },
+        {
+          "raw": "\\Delta F_{\\mathrm{H}_2,\\mathrm{HFC}}^{\\min}",
+          "latex": "\\Delta F_{\\mathrm{H}_2,\\mathrm{HFC}}^{\\min}",
+          "meaning": "燃料电池最小爬坡变化",
+          "unit": "\\mathrm{kW}/\\text{步}",
+          "bounds": [],
+          "meaningEn": "lower limits of HFC climbing power"
+        },
+        {
+          "raw": "\\Delta F_{\\mathrm{H}_2,\\mathrm{HFC}}^{\\max}",
+          "latex": "\\Delta F_{\\mathrm{H}_2,\\mathrm{HFC}}^{\\max}",
+          "meaning": "燃料电池最大爬坡变化",
+          "unit": "\\mathrm{kW}/\\text{步}",
+          "bounds": [],
+          "meaningEn": "upper limits of HFC climbing power"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）补充文档 Appendix A, (5) Fuel cell, 四式。原文后两式是氢输入功率与爬坡约束，已放入参数取值范围。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466. Supplementary material, Appendix A, Appendix A, (5) Fuel cell, 四式."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "Fuel cell (FC)"
+    },
+    {
+      "id": "A-GB",
+      "sourceTag": "A-GB",
+      "title": "燃气锅炉热转换",
+      "module": "燃气转换",
+      "submodel": "燃气锅炉",
+      "section": "补充文档 Appendix A, (6) Gas boiler, 三式",
+      "latex": "Q_{\\mathrm{GB}}(t)=\\eta_{\\mathrm{GB}}F_{\\mathrm{GB}}(t)",
+      "formulas": [
+        "Q_{\\mathrm{GB}}(t)=\\eta_{\\mathrm{GB}}F_{\\mathrm{GB}}(t)"
+      ],
+      "description": "天然气输入经锅炉转换为热功率，并满足输入与爬坡限制。",
+      "note": "天然气输入经锅炉转换为热功率，并满足输入与爬坡限制。",
+      "symbols": [
+        {
+          "raw": "Q_{\\mathrm{GB}}",
+          "latex": "Q_{\\mathrm{GB}}",
+          "meaning": "锅炉输出热功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "output thermal power of GB"
+        },
+        {
+          "raw": "F_{\\mathrm{GB}}",
+          "latex": "F_{\\mathrm{GB}}",
+          "meaning": "锅炉天然气输入功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [
+            "F_{\\mathrm{GB}}^{\\min}\\le F_{\\mathrm{GB}}(t)\\le F_{\\mathrm{GB}}^{\\max}"
+          ],
+          "meaningEn": "natural gas consumption power of GB"
+        },
+        {
+          "raw": "F_{\\mathrm{GB}}^{\\min}",
+          "latex": "F_{\\mathrm{GB}}^{\\min}",
+          "meaning": "锅炉最小天然气输入功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "lower limits of GB input power"
+        },
+        {
+          "raw": "F_{\\mathrm{GB}}^{\\max}",
+          "latex": "F_{\\mathrm{GB}}^{\\max}",
+          "meaning": "锅炉最大天然气输入功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "upper limits of GB input power"
+        },
+        {
+          "raw": "\\eta_{\\mathrm{GB}}",
+          "latex": "\\eta_{\\mathrm{GB}}",
+          "meaning": "锅炉效率",
+          "unit": "—",
+          "bounds": [
+            "0\\le \\eta_{\\mathrm{GB}}\\le 1"
+          ],
+          "meaningEn": "conversion efficiency of GB"
+        },
+        {
+          "raw": "\\Delta F_{\\mathrm{GB}}",
+          "latex": "\\Delta F_{\\mathrm{GB}}",
+          "meaning": "天然气输入爬坡量",
+          "unit": "\\mathrm{kW}/\\text{步}",
+          "bounds": [
+            "\\Delta F_{\\mathrm{GB}}^{\\min}\\le F_{\\mathrm{GB}}(t+1)-F_{\\mathrm{GB}}(t)\\le\\Delta F_{\\mathrm{GB}}^{\\max}"
+          ],
+          "meaningEn": "GB climbing power"
+        },
+        {
+          "raw": "\\Delta F_{\\mathrm{GB}}^{\\min}",
+          "latex": "\\Delta F_{\\mathrm{GB}}^{\\min}",
+          "meaning": "锅炉最小爬坡变化",
+          "unit": "\\mathrm{kW}/\\text{步}",
+          "bounds": [],
+          "meaningEn": "lower limits of GB climbing power"
+        },
+        {
+          "raw": "\\Delta F_{\\mathrm{GB}}^{\\max}",
+          "latex": "\\Delta F_{\\mathrm{GB}}^{\\max}",
+          "meaning": "锅炉最大爬坡变化",
+          "unit": "\\mathrm{kW}/\\text{步}",
+          "bounds": [],
+          "meaningEn": "upper limits of GB climbing power"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）补充文档 Appendix A, (6) Gas boiler, 三式。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466. Supplementary material, Appendix A, Appendix A, (6) Gas boiler, 三式."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "Gas boiler (GB)"
+    },
+    {
+      "id": "A-ASHP",
+      "sourceTag": "A-ASHP",
+      "title": "空气源热泵性能系数",
+      "module": "热与冷转换",
+      "submodel": "空气源热泵",
+      "section": "补充文档 Appendix A, (7) Air source heat pump, 定义式",
+      "latex": "\\mathrm{COP}=\\frac{Q_e(t)}{E_i(t)}",
+      "formulas": [
+        "\\mathrm{COP}=\\frac{Q_e(t)}{E_i(t)}"
+      ],
+      "description": "用热泵输出热量或冷量与耗电量之比定义性能系数。",
+      "note": "用热泵输出热量或冷量与耗电量之比定义性能系数。",
+      "symbols": [
+        {
+          "raw": "\\mathrm{COP}",
+          "latex": "\\mathrm{COP}",
+          "meaning": "热泵性能系数",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "fixed performance coefficient"
+        },
+        {
+          "raw": "Q_e",
+          "latex": "Q_e",
+          "meaning": "热泵输出热量或冷量",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "heat load to be met"
+        },
+        {
+          "raw": "E_i",
+          "latex": "E_i",
+          "meaning": "热泵输入电功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "required energy"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）补充文档 Appendix A, (7) Air source heat pump, 定义式。补充文档称输入为热负荷和固定 COP，可反求耗电；符号 Q_e 的冷热属性需按运行模式确认。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466. Supplementary material, Appendix A, Appendix A, (7) Air source heat pump, 定义式."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "Air source heat pump (ASHP)"
+    },
+    {
+      "id": "A-AHP",
+      "sourceTag": "A-AHP",
+      "title": "吸收式热泵输入输出",
+      "module": "热与冷转换",
+      "submodel": "吸收式热泵",
+      "section": "补充文档 Appendix A, (8) AHP, 定义式",
+      "latex": "Q_{\\mathrm{AHP}}^{\\mathrm{out}}(t)=\\eta_{\\mathrm{AHP}}Q_{\\mathrm{AHP}}^{\\mathrm{in}}(t)",
+      "formulas": [
+        "Q_{\\mathrm{AHP}}^{\\mathrm{out}}(t)=\\eta_{\\mathrm{AHP}}Q_{\\mathrm{AHP}}^{\\mathrm{in}}(t)"
+      ],
+      "description": "按转换效率由输入热功率计算输出。",
+      "note": "按转换效率由输入热功率计算输出。",
+      "symbols": [
+        {
+          "raw": "Q_{\\mathrm{AHP}}^{\\mathrm{out}}",
+          "latex": "Q_{\\mathrm{AHP}}^{\\mathrm{out}}",
+          "meaning": "AHP 输出热功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "output heat of AHP"
+        },
+        {
+          "raw": "Q_{\\mathrm{AHP}}^{\\mathrm{in}}",
+          "latex": "Q_{\\mathrm{AHP}}^{\\mathrm{in}}",
+          "meaning": "AHP 输入热功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "heat input"
+        },
+        {
+          "raw": "\\eta_{\\mathrm{AHP}}",
+          "latex": "\\eta_{\\mathrm{AHP}}",
+          "meaning": "AHP 转换效率",
+          "unit": "—",
+          "bounds": [
+            "0\\le \\eta_{\\mathrm{AHP}}\\le 1"
+          ],
+          "meaningEn": "heat conversion efficiency of AHP"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）补充文档 Appendix A, (8) AHP, 定义式。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466. Supplementary material, Appendix A, Appendix A, (8) AHP, 定义式."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "High pressure feedwater heater system (AHP)",
+      "sourceWarning": "论文缩略语表将 AHP 写为 absorption heat pump；补充文档 Appendix A (8) 的标题写为 High pressure feedwater heater system (AHP)。英文标题按补充文档原词记录，请核对原文中的称谓差异。"
+    },
+    {
+      "id": "A-ORC",
+      "sourceTag": "A-ORC",
+      "title": "有机朗肯循环发电",
+      "module": "热与冷转换",
+      "submodel": "有机朗肯循环",
+      "section": "补充文档 Appendix A, (9) Organic Rankine cycle, 定义式",
+      "latex": "E_{\\mathrm{orc}}(t)=\\eta_{\\mathrm{orc}}Q_{\\mathrm{orc}}(t)",
+      "formulas": [
+        "E_{\\mathrm{orc}}(t)=\\eta_{\\mathrm{orc}}Q_{\\mathrm{orc}}(t)"
+      ],
+      "description": "按热电效率将输入热功率转换为电功率。",
+      "note": "按热电效率将输入热功率转换为电功率。",
+      "symbols": [
+        {
+          "raw": "E_{\\mathrm{orc}}",
+          "latex": "E_{\\mathrm{orc}}",
+          "meaning": "ORC 发电功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "output power of organic Rankine cycle system"
+        },
+        {
+          "raw": "Q_{\\mathrm{orc}}",
+          "latex": "Q_{\\mathrm{orc}}",
+          "meaning": "ORC 输入热功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "input heat"
+        },
+        {
+          "raw": "\\eta_{\\mathrm{orc}}",
+          "latex": "\\eta_{\\mathrm{orc}}",
+          "meaning": "ORC 发电效率",
+          "unit": "—",
+          "bounds": [
+            "0\\le \\eta_{\\mathrm{orc}}\\le 1"
+          ],
+          "meaningEn": "power efficiency"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）补充文档 Appendix A, (9) Organic Rankine cycle, 定义式。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466. Supplementary material, Appendix A, Appendix A, (9) Organic Rankine cycle, 定义式."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "Organic Rankine cycle (ORC)"
+    },
+    {
+      "id": "A-WHB",
+      "sourceTag": "A-WHB",
+      "title": "余热锅炉产热",
+      "module": "热与冷转换",
+      "submodel": "余热锅炉",
+      "section": "补充文档 Appendix A, (10) Waste heat boiler, 定义式",
+      "latex": "Q_{\\mathrm{WHB}}^{\\mathrm{out}}(t)=\\eta_{\\mathrm{WHB}}Q_{\\mathrm{WHB}}^{\\mathrm{in}}(t)",
+      "formulas": [
+        "Q_{\\mathrm{WHB}}^{\\mathrm{out}}(t)=\\eta_{\\mathrm{WHB}}Q_{\\mathrm{WHB}}^{\\mathrm{in}}(t)"
+      ],
+      "description": "按余热锅炉转换效率计算输出热功率。",
+      "note": "按余热锅炉转换效率计算输出热功率。",
+      "symbols": [
+        {
+          "raw": "Q_{\\mathrm{WHB}}^{\\mathrm{out}}",
+          "latex": "Q_{\\mathrm{WHB}}^{\\mathrm{out}}",
+          "meaning": "WHB 输出热功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "output thermal power of WHB"
+        },
+        {
+          "raw": "Q_{\\mathrm{WHB}}^{\\mathrm{in}}",
+          "latex": "Q_{\\mathrm{WHB}}^{\\mathrm{in}}",
+          "meaning": "WHB 输入热功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "input thermal power of WHB"
+        },
+        {
+          "raw": "\\eta_{\\mathrm{WHB}}",
+          "latex": "\\eta_{\\mathrm{WHB}}",
+          "meaning": "WHB 转换效率",
+          "unit": "—",
+          "bounds": [
+            "0\\le \\eta_{\\mathrm{WHB}}\\le 1"
+          ],
+          "meaningEn": "conversion efficiency of WHB"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）补充文档 Appendix A, (10) Waste heat boiler, 定义式。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466. Supplementary material, Appendix A, Appendix A, (10) Waste heat boiler, 定义式."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "A-GT",
+        "A-FC"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "Waste heat boiler (WHB)"
+    },
+    {
+      "id": "A-STO",
+      "sourceTag": "A-STO",
+      "title": "电热气氢通用储能",
+      "module": "多能储能",
+      "submodel": "通用储能模型",
+      "section": "补充文档 Appendix A, (11) Energy storage, 七式",
+      "latex": "E_s(t)=\\eta_s^{\\mathrm{cha}}E_s^{\\mathrm{cha}}(t)-\\frac{E_s^{\\mathrm{dis}}(t)}{\\eta_s^{\\mathrm{dis}}}",
+      "formulas": [
+        "E_s(t)=\\eta_s^{\\mathrm{cha}}E_s^{\\mathrm{cha}}(t)-\\frac{E_s^{\\mathrm{dis}}(t)}{\\eta_s^{\\mathrm{dis}}}",
+        "S_s(t)=S_s(t-1)+\\frac{E_s(t)}{E_{sn}}",
+        "S_s(1)=S_s(T)",
+        "\\varphi_s^{\\mathrm{cha}}(t)+\\varphi_s^{\\mathrm{dis}}(t)=1"
+      ],
+      "description": "统一描述电、热、气、氢储能的净输入、状态递推、周期边界和充放互斥。",
+      "note": "统一描述电、热、气、氢储能的净输入、状态递推、周期边界和充放互斥。",
+      "symbols": [
+        {
+          "raw": "s",
+          "latex": "s",
+          "meaning": "储能种类索引",
+          "unit": "—",
+          "bounds": [
+            "s\\in\\{\\mathrm{EES,TES,GS,HES}\\}"
+          ]
+        },
+        {
+          "raw": "E_s",
+          "latex": "E_s",
+          "meaning": "储能净输入功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "net input power of energy storage"
+        },
+        {
+          "raw": "E_s^{\\mathrm{cha}}",
+          "latex": "E_s^{\\mathrm{cha}}",
+          "meaning": "充能功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [
+            "0\\le E_s^{\\mathrm{cha}}(t)\\le\\varphi_s^{\\mathrm{cha}}(t)E_s^{\\mathrm{cha,max}}"
+          ],
+          "meaningEn": "charging power of energy storage"
+        },
+        {
+          "raw": "E_s^{\\mathrm{dis}}",
+          "latex": "E_s^{\\mathrm{dis}}",
+          "meaning": "放能功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [
+            "0\\le E_s^{\\mathrm{dis}}(t)\\le\\varphi_s^{\\mathrm{dis}}(t)E_s^{\\mathrm{dis,max}}"
+          ],
+          "meaningEn": "discharging power of energy storage"
+        },
+        {
+          "raw": "E_s^{\\mathrm{cha,max}}",
+          "latex": "E_s^{\\mathrm{cha,max}}",
+          "meaning": "最大充能功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "E_s^{\\mathrm{dis,max}}",
+          "latex": "E_s^{\\mathrm{dis,max}}",
+          "meaning": "最大放能功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "\\eta_s^{\\mathrm{cha}}",
+          "latex": "\\eta_s^{\\mathrm{cha}}",
+          "meaning": "充能效率",
+          "unit": "—",
+          "bounds": [
+            "0\\le \\eta_s^{\\mathrm{cha}}\\le 1"
+          ],
+          "meaningEn": "charging efficiency of energy storage"
+        },
+        {
+          "raw": "\\eta_s^{\\mathrm{dis}}",
+          "latex": "\\eta_s^{\\mathrm{dis}}",
+          "meaning": "放能效率",
+          "unit": "—",
+          "bounds": [
+            "0\\le \\eta_s^{\\mathrm{dis}}\\le 1"
+          ],
+          "meaningEn": "discharging efficiency of energy storage"
+        },
+        {
+          "raw": "S_s",
+          "latex": "S_s",
+          "meaning": "储能荷电或库存状态",
+          "unit": "—",
+          "bounds": [
+            "S_s^{\\min}\\le S_s(t)\\le S_s^{\\max}",
+            "0\\le S_s\\le 1"
+          ],
+          "meaningEn": "charged state of energy storage"
+        },
+        {
+          "raw": "S_s^{\\min}",
+          "latex": "S_s^{\\min}",
+          "meaning": "最小储能状态",
+          "unit": "—",
+          "bounds": [
+            "0\\le S_s^{\\min}\\le 1"
+          ],
+          "meaningEn": "lower limits of the energy storage state"
+        },
+        {
+          "raw": "S_s^{\\max}",
+          "latex": "S_s^{\\max}",
+          "meaning": "最大储能状态",
+          "unit": "—",
+          "bounds": [
+            "0\\le S_s^{\\max}\\le 1"
+          ],
+          "meaningEn": "upper limits of the energy storage state"
+        },
+        {
+          "raw": "E_{sn}",
+          "latex": "E_{sn}",
+          "meaning": "储能额定容量",
+          "unit": "\\mathrm{kWh}",
+          "bounds": [],
+          "meaningEn": "rated capacity of energy storage"
+        },
+        {
+          "raw": "\\varphi_s^{\\mathrm{cha}}",
+          "latex": "\\varphi_s^{\\mathrm{cha}}",
+          "meaning": "充能状态二元变量",
+          "unit": "0\\text{ 或 }1",
+          "bounds": []
+        },
+        {
+          "raw": "\\varphi_s^{\\mathrm{dis}}",
+          "latex": "\\varphi_s^{\\mathrm{dis}}",
+          "meaning": "放能状态二元变量",
+          "unit": "0\\text{ 或 }1",
+          "bounds": []
+        }
+      ],
+      "basis": "来源：Fan 等（2025）补充文档 Appendix A, (11) Energy storage, 七式。补充文档原有七个数学表达式，其中充放功率和 SOC 范围三式放在相应参数的“取值范围”中。\n原文待核对：状态递推式未显式写入 Δt，且互斥式写为两状态之和等于 1；两处均按原文保留，应用于任意步长时须核对。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466. Supplementary material, Appendix A, Appendix A, (11) Energy storage, 七式."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "sourceWarning": "状态递推式未显式写入 Δt，且互斥式写为两状态之和等于 1；两处均按原文保留，应用于任意步长时须核对。",
+      "titleEn": "Energy storage (storage)"
+    },
+    {
+      "id": "7",
+      "sourceTag": "7",
+      "title": "太阳、风速与任务概率密度",
+      "module": "不确定性与场景",
+      "submodel": "源荷概率分布",
+      "section": "正文 式 (7)",
+      "latex": "\\operatorname{PDF}(I,\\alpha,\\beta)=\\frac{I^{\\alpha-1}(1-I)^{\\beta-1}}{B(\\alpha,\\beta)}",
+      "formulas": [
+        "\\operatorname{PDF}(I,\\alpha,\\beta)=\\frac{I^{\\alpha-1}(1-I)^{\\beta-1}}{B(\\alpha,\\beta)}",
+        "\\operatorname{PDF}(v,\\varphi,\\lambda)=\\frac{\\varphi}{\\lambda}\\left(\\frac{v}{\\lambda}\\right)^{\\varphi-1}\\exp\\left[-\\left(\\frac{v}{\\lambda}\\right)^\\varphi\\right]",
+        "\\operatorname{PDF}(CT,\\sigma,\\mu)=\\frac{1}{\\sqrt{2\\pi\\sigma}}\\exp\\left[-\\frac{CT-\\mu}{2\\sigma^2}\\right]"
+      ],
+      "description": "分别以 Beta、Weibull 和正态型表达式描述辐照、风速、计算任务的不确定性。",
+      "note": "分别以 Beta、Weibull 和正态型表达式描述辐照、风速、计算任务的不确定性。",
+      "symbols": [
+        {
+          "raw": "I",
+          "latex": "I",
+          "meaning": "归一化太阳辐照度",
+          "unit": "—",
+          "bounds": [
+            "0\\le I\\le 1"
+          ],
+          "meaningEn": "solar radiations"
+        },
+        {
+          "raw": "\\alpha",
+          "latex": "\\alpha",
+          "meaning": "Beta 分布形状参数",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "characteristic parameters of solar radiations"
+        },
+        {
+          "raw": "\\beta",
+          "latex": "\\beta",
+          "meaning": "Beta 分布形状参数",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "characteristic parameters of solar radiations"
+        },
+        {
+          "raw": "B(\\alpha,\\beta)",
+          "latex": "B(\\alpha,\\beta)",
+          "meaning": "Beta 函数",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "Beta function"
+        },
+        {
+          "raw": "v",
+          "latex": "v",
+          "meaning": "风速",
+          "unit": "\\mathrm{m}/\\mathrm{s}",
+          "bounds": [],
+          "meaningEn": "wind speed"
+        },
+        {
+          "raw": "\\varphi",
+          "latex": "\\varphi",
+          "meaning": "Weibull 形状参数",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "shape parameter of wind speeds"
+        },
+        {
+          "raw": "\\lambda",
+          "latex": "\\lambda",
+          "meaning": "Weibull 尺度参数",
+          "unit": "\\mathrm{m}/\\mathrm{s}",
+          "bounds": [],
+          "meaningEn": "scale parameter of wind speeds"
+        },
+        {
+          "raw": "CT",
+          "latex": "CT",
+          "meaning": "计算任务随机量",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "computation tasks"
+        },
+        {
+          "raw": "\\mu",
+          "latex": "\\mu",
+          "meaning": "任务分布均值",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "mean value of computation tasks"
+        },
+        {
+          "raw": "\\sigma",
+          "latex": "\\sigma",
+          "meaning": "任务分布标准差",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "standard deviation of computation tasks"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (7)。正文 §3.1；场景生成还使用 LHS、时间自相关和 Wasserstein 场景缩减，原文未给出这些步骤的单独数学式。\n原文待核对：第三行按论文印刷形式转录；其正态密度的根号、指数中可能缺少平方，未替作者修正。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "sourceWarning": "第三行按论文印刷形式转录；其正态密度的根号、指数中可能缺少平方，未替作者修正。",
+      "titleEn": "probability density functions"
+    },
+    {
+      "id": "8",
+      "sourceTag": "8",
+      "title": "随机联合调度模型",
+      "module": "优化调度",
+      "submodel": "随机优化框架",
+      "section": "正文 式 (8)",
+      "latex": "\\min_{X\\in\\Gamma}C_s(X),\\quad s\\in\\Omega",
+      "formulas": [
+        "\\min_{X\\in\\Gamma}C_s(X),\\quad s\\in\\Omega",
+        "m(X)=0",
+        "g(X)\\le0"
+      ],
+      "description": "以总运行成本最小为目标，满足等式和不等式约束。",
+      "note": "以总运行成本最小为目标，满足等式和不等式约束。",
+      "symbols": [
+        {
+          "raw": "X",
+          "latex": "X",
+          "meaning": "决策变量矩阵",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "matrix of decision variables"
+        },
+        {
+          "raw": "\\Gamma",
+          "latex": "\\Gamma",
+          "meaning": "决策变量可行集",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "decision variable set"
+        },
+        {
+          "raw": "C_s",
+          "latex": "C_s",
+          "meaning": "情景 s 的运行成本",
+          "unit": "\\mathrm{USD}",
+          "bounds": [],
+          "meaningEn": "total operation cost"
+        },
+        {
+          "raw": "s",
+          "latex": "s",
+          "meaning": "情景索引",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "scenario"
+        },
+        {
+          "raw": "\\Omega",
+          "latex": "\\Omega",
+          "meaning": "情景集合",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "scenario set"
+        },
+        {
+          "raw": "m(X)",
+          "latex": "m(X)",
+          "meaning": "等式约束函数",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "equality constraints"
+        },
+        {
+          "raw": "g(X)",
+          "latex": "g(X)",
+          "meaning": "不等式约束函数",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "inequality constraints"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (8)。正文 §3.2；典型调度周期 T=24 h，时间步长 1 h。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "7"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "stochastic optimization of combined energy and computation scheduling"
+    },
+    {
+      "id": "9",
+      "sourceTag": "9",
+      "title": "购能与弃电成本",
+      "module": "优化调度",
+      "submodel": "购能与弃电成本",
+      "section": "正文 式 (9)",
+      "latex": "C_s=C_{\\mathrm{buy},s}+C_{\\mathrm{cur},s}=\\sum_{t=1}^{T}\\left(c_{e,s,t}E_{\\mathrm{grid},s,t}+c_{f,s,t}F_{\\mathrm{pipe},s,t}+\\lambda_{s,t}E_{\\mathrm{cur},s,t}\\right)",
+      "formulas": [
+        "C_s=C_{\\mathrm{buy},s}+C_{\\mathrm{cur},s}=\\sum_{t=1}^{T}\\left(c_{e,s,t}E_{\\mathrm{grid},s,t}+c_{f,s,t}F_{\\mathrm{pipe},s,t}+\\lambda_{s,t}E_{\\mathrm{cur},s,t}\\right)"
+      ],
+      "description": "计算购电、购气及弃风弃光惩罚的调度成本。",
+      "note": "计算购电、购气及弃风弃光惩罚的调度成本。",
+      "symbols": [
+        {
+          "raw": "C_s",
+          "latex": "C_s",
+          "meaning": "情景总运行成本",
+          "unit": "\\mathrm{USD}",
+          "bounds": [],
+          "meaningEn": "total operation cost"
+        },
+        {
+          "raw": "C_{\\mathrm{buy},s}",
+          "latex": "C_{\\mathrm{buy},s}",
+          "meaning": "购电购气成本",
+          "unit": "\\mathrm{USD}",
+          "bounds": [],
+          "meaningEn": "total cost of purchased electricity and natural gas"
+        },
+        {
+          "raw": "C_{\\mathrm{cur},s}",
+          "latex": "C_{\\mathrm{cur},s}",
+          "meaning": "可再生能源弃电惩罚成本",
+          "unit": "\\mathrm{USD}",
+          "bounds": [],
+          "meaningEn": "cost of wind and PV curtailment"
+        },
+        {
+          "raw": "c_{e,s,t}",
+          "latex": "c_{e,s,t}",
+          "meaning": "分时电价",
+          "unit": "\\mathrm{USD}/\\mathrm{kWh}",
+          "bounds": [],
+          "meaningEn": "time-varying electricity price"
+        },
+        {
+          "raw": "E_{\\mathrm{grid},s,t}",
+          "latex": "E_{\\mathrm{grid},s,t}",
+          "meaning": "购电功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "purchased electricity from grid"
+        },
+        {
+          "raw": "c_{f,s,t}",
+          "latex": "c_{f,s,t}",
+          "meaning": "天然气价格",
+          "unit": "\\mathrm{USD}/\\mathrm{kWh}",
+          "bounds": [],
+          "meaningEn": "natural gas price"
+        },
+        {
+          "raw": "F_{\\mathrm{pipe},s,t}",
+          "latex": "F_{\\mathrm{pipe},s,t}",
+          "meaning": "管网购气输入",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "purchased natural gas"
+        },
+        {
+          "raw": "\\lambda_{s,t}",
+          "latex": "\\lambda_{s,t}",
+          "meaning": "弃电惩罚价格",
+          "unit": "\\mathrm{USD}/\\mathrm{kWh}",
+          "bounds": [],
+          "meaningEn": "punishment electricity price due to the curtailment"
+        },
+        {
+          "raw": "E_{\\mathrm{cur},s,t}",
+          "latex": "E_{\\mathrm{cur},s,t}",
+          "meaning": "弃风弃光功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "renewable power curtailment"
+        },
+        {
+          "raw": "T",
+          "latex": "T",
+          "meaning": "调度时段数",
+          "unit": "\\text{步}",
+          "bounds": [],
+          "meaningEn": "schedule cycle"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (9)。正文 §3.2.1；功率与价格相乘求和时，实际计算需确认时间步长。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "8",
+        "15",
+        "18"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "purchased electricity cost and the curtailment cost of renewable power"
+    },
+    {
+      "id": "10",
+      "sourceTag": "10",
+      "title": "系统净碳排放",
+      "module": "优化调度",
+      "submodel": "碳排放与配额",
+      "section": "正文 式 (10)",
+      "latex": "M_s=M_{\\mathrm{grid},s}+(M_{\\mathrm{GT},s}+M_{\\mathrm{GB},s})-M_{\\mathrm{H2G},s}",
+      "formulas": [
+        "M_s=M_{\\mathrm{grid},s}+(M_{\\mathrm{GT},s}+M_{\\mathrm{GB},s})-M_{\\mathrm{H2G},s}",
+        "M_s=\\sum_{t=1}^{T}\\left[(a_1+a_2E_{\\mathrm{grid},t,s}+a_3E_{\\mathrm{grid},t,s}^{2})+\\beta_{\\mathrm{Gas}}(F_{\\mathrm{GT},t,s}+F_{\\mathrm{GB},t,s})-\\beta_{\\mathrm{H2G}}F_{\\mathrm{H2G},t,s}\\right]"
+      ],
+      "description": "购电和燃气产生的 CO₂ 扣除甲烷化消耗 CO₂，得到净排放。",
+      "note": "购电和燃气产生的 CO₂ 扣除甲烷化消耗 CO₂，得到净排放。",
+      "symbols": [
+        {
+          "raw": "M_s",
+          "latex": "M_s",
+          "meaning": "情景净碳排放",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}",
+          "bounds": [],
+          "meaningEn": "CO2 emission"
+        },
+        {
+          "raw": "M_{\\mathrm{grid},s}",
+          "latex": "M_{\\mathrm{grid},s}",
+          "meaning": "购电关联排放",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}",
+          "bounds": [],
+          "meaningEn": "emission of purchased electricity from grid"
+        },
+        {
+          "raw": "M_{\\mathrm{GT},s}",
+          "latex": "M_{\\mathrm{GT},s}",
+          "meaning": "燃机排放",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}",
+          "bounds": [],
+          "meaningEn": "emission of natural gas consumed by GT"
+        },
+        {
+          "raw": "M_{\\mathrm{GB},s}",
+          "latex": "M_{\\mathrm{GB},s}",
+          "meaning": "燃气锅炉排放",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}",
+          "bounds": [],
+          "meaningEn": "emission of natural gas consumed by GB"
+        },
+        {
+          "raw": "M_{\\mathrm{H2G},s}",
+          "latex": "M_{\\mathrm{H2G},s}",
+          "meaning": "H2G 消耗 CO₂",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}",
+          "bounds": [],
+          "meaningEn": "consumed CO2 in the H2G"
+        },
+        {
+          "raw": "a_1",
+          "latex": "a_1",
+          "meaning": "购电排放函数常数项",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "coefficients of Egrid,s with Mgrid,s"
+        },
+        {
+          "raw": "a_2",
+          "latex": "a_2",
+          "meaning": "购电排放一次系数",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "coefficients of Egrid,s with Mgrid,s"
+        },
+        {
+          "raw": "a_3",
+          "latex": "a_3",
+          "meaning": "购电排放二次系数",
+          "unit": "—",
+          "bounds": [],
+          "meaningEn": "coefficients of Egrid,s with Mgrid,s"
+        },
+        {
+          "raw": "\\beta_{\\mathrm{Gas}}",
+          "latex": "\\beta_{\\mathrm{Gas}}",
+          "meaning": "天然气碳排放系数",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}/\\mathrm{kWh}",
+          "bounds": [],
+          "meaningEn": "CO2 emission factor of natural gas"
+        },
+        {
+          "raw": "\\beta_{\\mathrm{H2G}}",
+          "latex": "\\beta_{\\mathrm{H2G}}",
+          "meaning": "H2G CO₂ 利用系数",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}/\\mathrm{kWh}",
+          "bounds": [],
+          "meaningEn": "CO2 utilization factor of H2G"
+        },
+        {
+          "raw": "E_{\\mathrm{grid},t,s}",
+          "latex": "E_{\\mathrm{grid},t,s}",
+          "meaning": "购电功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "purchased electricity from grid"
+        },
+        {
+          "raw": "F_{\\mathrm{GT},t,s}",
+          "latex": "F_{\\mathrm{GT},t,s}",
+          "meaning": "燃机天然气输入",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "F_{\\mathrm{GB},t,s}",
+          "latex": "F_{\\mathrm{GB},t,s}",
+          "meaning": "锅炉天然气输入",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "F_{\\mathrm{H2G},t,s}",
+          "latex": "F_{\\mathrm{H2G},t,s}",
+          "meaning": "H2G 能量输入",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (10)。正文 §3.2.1；原文网电下标拼写不完全一致，此处统一为 grid，不改变式意。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "A-GT",
+        "A-GB",
+        "A-P2G"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [
+        {
+          "index": 1,
+          "role": "dependent",
+          "label": "按来源展开净排放"
+        }
+      ],
+      "titleEn": "CO2 emission"
+    },
+    {
+      "id": "11",
+      "sourceTag": "11",
+      "title": "初始碳配额",
+      "module": "优化调度",
+      "submodel": "碳排放与配额",
+      "section": "正文 式 (11)",
+      "latex": "M_s^{\\prime}=M_{\\mathrm{grid},s}^{\\prime}+M_{\\mathrm{GT},s}^{\\prime}+M_{\\mathrm{GB},s}^{\\prime}",
+      "formulas": [
+        "M_s^{\\prime}=M_{\\mathrm{grid},s}^{\\prime}+M_{\\mathrm{GT},s}^{\\prime}+M_{\\mathrm{GB},s}^{\\prime}",
+        "M_s^{\\prime}=\\sum_{t=1}^{T}\\left(\\beta_eE_{\\mathrm{grid},t,s}+\\beta_hF_{\\mathrm{GT},t,s}+\\beta_hF_{\\mathrm{GB},t,s}\\right)"
+      ],
+      "description": "按购电与燃气消耗核定初始碳排放配额。",
+      "note": "按购电与燃气消耗核定初始碳排放配额。",
+      "symbols": [
+        {
+          "raw": "M_s^{\\prime}",
+          "latex": "M_s^{\\prime}",
+          "meaning": "情景初始碳配额",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}",
+          "bounds": [],
+          "meaningEn": "initial carbon allowance of the hybrid system"
+        },
+        {
+          "raw": "M_{\\mathrm{grid},s}^{\\prime}",
+          "latex": "M_{\\mathrm{grid},s}^{\\prime}",
+          "meaning": "购电配额",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}",
+          "bounds": [],
+          "meaningEn": "carbon allowances of purchased electricity from grid"
+        },
+        {
+          "raw": "M_{\\mathrm{GT},s}^{\\prime}",
+          "latex": "M_{\\mathrm{GT},s}^{\\prime}",
+          "meaning": "燃机配额",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}",
+          "bounds": [],
+          "meaningEn": "carbon allowances of consumed natural gas by GT"
+        },
+        {
+          "raw": "M_{\\mathrm{GB},s}^{\\prime}",
+          "latex": "M_{\\mathrm{GB},s}^{\\prime}",
+          "meaning": "锅炉配额",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}",
+          "bounds": [],
+          "meaningEn": "carbon allowances of consumed natural gas by GB"
+        },
+        {
+          "raw": "\\beta_e",
+          "latex": "\\beta_e",
+          "meaning": "电力配额系数",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}/\\mathrm{kWh}",
+          "bounds": [],
+          "meaningEn": "carbon allowance coefficients of electricity"
+        },
+        {
+          "raw": "\\beta_h",
+          "latex": "\\beta_h",
+          "meaning": "燃气配额系数",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}/\\mathrm{kWh}",
+          "bounds": [],
+          "meaningEn": "carbon allowance coefficients of natural gas"
+        },
+        {
+          "raw": "E_{\\mathrm{grid},t,s}",
+          "latex": "E_{\\mathrm{grid},t,s}",
+          "meaning": "购电功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "purchased electricity from grid"
+        },
+        {
+          "raw": "F_{\\mathrm{GT},t,s}",
+          "latex": "F_{\\mathrm{GT},t,s}",
+          "meaning": "燃机天然气输入",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "F_{\\mathrm{GB},t,s}",
+          "latex": "F_{\\mathrm{GB},t,s}",
+          "meaning": "锅炉天然气输入",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (11)。正文 §3.2.1；配额系数示例值在原文表 4。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "10"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [
+        {
+          "index": 1,
+          "role": "dependent",
+          "label": "按购电与用气展开配额"
+        }
+      ],
+      "titleEn": "initial carbon allowance"
+    },
+    {
+      "id": "12",
+      "sourceTag": "12",
+      "title": "碳交易成本",
+      "module": "优化调度",
+      "submodel": "碳排放与配额",
+      "section": "正文 式 (12)",
+      "latex": "C_{\\mathrm{carbon},s}=c_{\\mathrm{carbon}}(M_s-M_s^{\\prime})",
+      "formulas": [
+        "C_{\\mathrm{carbon},s}=c_{\\mathrm{carbon}}(M_s-M_s^{\\prime})"
+      ],
+      "description": "实际排放超过配额时形成成本，低于配额时形成收益。",
+      "note": "实际排放超过配额时形成成本，低于配额时形成收益。",
+      "symbols": [
+        {
+          "raw": "C_{\\mathrm{carbon},s}",
+          "latex": "C_{\\mathrm{carbon},s}",
+          "meaning": "碳交易净成本",
+          "unit": "\\mathrm{USD}",
+          "bounds": [],
+          "meaningEn": "carbon cost"
+        },
+        {
+          "raw": "c_{\\mathrm{carbon}}",
+          "latex": "c_{\\mathrm{carbon}}",
+          "meaning": "单位碳价",
+          "unit": "\\mathrm{USD}/(\\mathrm{kg}\\,\\mathrm{CO}_{2})",
+          "bounds": [],
+          "meaningEn": "baseline of unit carbon price"
+        },
+        {
+          "raw": "M_s",
+          "latex": "M_s",
+          "meaning": "情景净碳排放",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}",
+          "bounds": [],
+          "meaningEn": "CO2 emission"
+        },
+        {
+          "raw": "M_s^{\\prime}",
+          "latex": "M_s^{\\prime}",
+          "meaning": "初始碳配额",
+          "unit": "\\mathrm{kg}\\,\\mathrm{CO}_{2}",
+          "bounds": [],
+          "meaningEn": "initial carbon allowance"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (12)。正文称阶梯式碳交易，但印刷公式为单一基准碳价形式；按原式录入。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "10",
+        "11"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "carbon cost"
+    },
+    {
+      "id": "13",
+      "sourceTag": "13",
+      "title": "含碳成本的总目标",
+      "module": "优化调度",
+      "submodel": "碳排放与配额",
+      "section": "正文 式 (13)",
+      "latex": "C_s^{\\prime}=C_{\\mathrm{buy},s}+C_{\\mathrm{cur},s}+C_{\\mathrm{carbon},s}",
+      "formulas": [
+        "C_s^{\\prime}=C_{\\mathrm{buy},s}+C_{\\mathrm{cur},s}+C_{\\mathrm{carbon},s}"
+      ],
+      "description": "在购能与弃电成本中加入碳交易成本。",
+      "note": "在购能与弃电成本中加入碳交易成本。",
+      "symbols": [
+        {
+          "raw": "C_s^{\\prime}",
+          "latex": "C_s^{\\prime}",
+          "meaning": "含碳交易成本的总目标",
+          "unit": "\\mathrm{USD}",
+          "bounds": [],
+          "meaningEn": "total cost considering the stepped carbon trade"
+        },
+        {
+          "raw": "C_{\\mathrm{buy},s}",
+          "latex": "C_{\\mathrm{buy},s}",
+          "meaning": "购能成本",
+          "unit": "\\mathrm{USD}",
+          "bounds": [],
+          "meaningEn": "total cost of purchased electricity and natural gas"
+        },
+        {
+          "raw": "C_{\\mathrm{cur},s}",
+          "latex": "C_{\\mathrm{cur},s}",
+          "meaning": "弃电成本",
+          "unit": "\\mathrm{USD}",
+          "bounds": [],
+          "meaningEn": "cost of wind and PV curtailment"
+        },
+        {
+          "raw": "C_{\\mathrm{carbon},s}",
+          "latex": "C_{\\mathrm{carbon},s}",
+          "meaning": "碳交易成本",
+          "unit": "\\mathrm{USD}",
+          "bounds": [],
+          "meaningEn": "carbon cost"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (13)。正文 §3.2.1。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "9",
+        "12"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "total cost considering the stepped carbon trade"
+    },
+    {
+      "id": "14",
+      "sourceTag": "14",
+      "title": "设备输出与爬坡约束",
+      "module": "优化调度",
+      "submodel": "设备运行约束",
+      "section": "正文 式 (14)",
+      "latex": "N_m^{\\min}\\le E_{m,t,s}\\le N_m^{\\max}",
+      "formulas": [
+        "N_m^{\\min}\\le E_{m,t,s}\\le N_m^{\\max}",
+        "\\Delta E_m^{\\min}\\le E_{m,t+1,s}-E_{m,t,s}\\le\\Delta E_m^{\\max}",
+        "N_m^{\\min}\\le Q_{m,t,s}\\le N_m^{\\max}",
+        "\\Delta Q_m^{\\min}\\le Q_{m,t+1,s}-Q_{m,t,s}\\le\\Delta Q_m^{\\max}"
+      ],
+      "description": "统一限制设备电、热输出及相邻时段的爬坡量。",
+      "note": "统一限制设备电、热输出及相邻时段的爬坡量。",
+      "symbols": [
+        {
+          "raw": "E_{m,t,s}",
+          "latex": "E_{m,t,s}",
+          "meaning": "设备 m 在 t、s 的电功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "Q_{m,t,s}",
+          "latex": "Q_{m,t,s}",
+          "meaning": "设备 m 在 t、s 的热功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "N_m^{\\min}",
+          "latex": "N_m^{\\min}",
+          "meaning": "设备最小输出",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "minimal output powers"
+        },
+        {
+          "raw": "N_m^{\\max}",
+          "latex": "N_m^{\\max}",
+          "meaning": "设备最大输出",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "maximal output powers"
+        },
+        {
+          "raw": "\\Delta E_m^{\\min}",
+          "latex": "\\Delta E_m^{\\min}",
+          "meaning": "电功率最小爬坡变化",
+          "unit": "\\mathrm{kW}/\\text{步}",
+          "bounds": [],
+          "meaningEn": "minimal climbing powers of power component"
+        },
+        {
+          "raw": "\\Delta E_m^{\\max}",
+          "latex": "\\Delta E_m^{\\max}",
+          "meaning": "电功率最大爬坡变化",
+          "unit": "\\mathrm{kW}/\\text{步}",
+          "bounds": [],
+          "meaningEn": "maximal climbing powers of power component"
+        },
+        {
+          "raw": "\\Delta Q_m^{\\min}",
+          "latex": "\\Delta Q_m^{\\min}",
+          "meaning": "热功率最小爬坡变化",
+          "unit": "\\mathrm{kW}/\\text{步}",
+          "bounds": []
+        },
+        {
+          "raw": "\\Delta Q_m^{\\max}",
+          "latex": "\\Delta Q_m^{\\max}",
+          "meaning": "热功率最大爬坡变化",
+          "unit": "\\mathrm{kW}/\\text{步}",
+          "bounds": []
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (14)。正文 §3.2.2；容量界限及爬坡界限适用于相应设备。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "operation constraints of components"
+    },
+    {
+      "id": "15",
+      "sourceTag": "15",
+      "title": "电力平衡",
+      "module": "优化调度",
+      "submodel": "多能流平衡",
+      "section": "正文 式 (15)",
+      "latex": "E_{\\mathrm{PV},t,s}+E_{\\mathrm{WT},t,s}+E_{\\mathrm{grid},t,s}+E_{\\mathrm{GT},t,s}+E_{\\mathrm{FC},t,s}+E_{\\mathrm{ORC},t,s}+E_{\\mathrm{EES},t,s}^{\\mathrm{dis}}=E_{\\mathrm{P2H},t,s}+E_{\\mathrm{ASHP},t,s}+E_{\\mathrm{DC},t,s}+E_{\\mathrm{EES},t,s}^{\\mathrm{cha}}",
+      "formulas": [
+        "E_{\\mathrm{PV},t,s}+E_{\\mathrm{WT},t,s}+E_{\\mathrm{grid},t,s}+E_{\\mathrm{GT},t,s}+E_{\\mathrm{FC},t,s}+E_{\\mathrm{ORC},t,s}+E_{\\mathrm{EES},t,s}^{\\mathrm{dis}}=E_{\\mathrm{P2H},t,s}+E_{\\mathrm{ASHP},t,s}+E_{\\mathrm{DC},t,s}+E_{\\mathrm{EES},t,s}^{\\mathrm{cha}}"
+      ],
+      "description": "各电源与储能放电等于电解制氢、热泵、数据中心负荷和储能充电。",
+      "note": "各电源与储能放电等于电解制氢、热泵、数据中心负荷和储能充电。",
+      "symbols": [
+        {
+          "raw": "E_{\\mathrm{PV},t,s}",
+          "latex": "E_{\\mathrm{PV},t,s}",
+          "meaning": "光伏出力",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "PV power generation"
+        },
+        {
+          "raw": "E_{\\mathrm{WT},t,s}",
+          "latex": "E_{\\mathrm{WT},t,s}",
+          "meaning": "风机出力",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "power output of wind turbines"
+        },
+        {
+          "raw": "E_{\\mathrm{grid},t,s}",
+          "latex": "E_{\\mathrm{grid},t,s}",
+          "meaning": "购电功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "purchased electricity from grid"
+        },
+        {
+          "raw": "E_{\\mathrm{GT},t,s}",
+          "latex": "E_{\\mathrm{GT},t,s}",
+          "meaning": "燃机发电功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "power generation of the gas turbine"
+        },
+        {
+          "raw": "E_{\\mathrm{FC},t,s}",
+          "latex": "E_{\\mathrm{FC},t,s}",
+          "meaning": "燃料电池发电功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "electrical power output of HFC"
+        },
+        {
+          "raw": "E_{\\mathrm{ORC},t,s}",
+          "latex": "E_{\\mathrm{ORC},t,s}",
+          "meaning": "ORC 发电功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "output power of organic Rankine cycle system"
+        },
+        {
+          "raw": "E_{\\mathrm{EES},t,s}^{\\mathrm{dis}}",
+          "latex": "E_{\\mathrm{EES},t,s}^{\\mathrm{dis}}",
+          "meaning": "电储能放电",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "discharge of storage component"
+        },
+        {
+          "raw": "E_{\\mathrm{P2H},t,s}",
+          "latex": "E_{\\mathrm{P2H},t,s}",
+          "meaning": "电解制氢耗电",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "E_{\\mathrm{ASHP},t,s}",
+          "latex": "E_{\\mathrm{ASHP},t,s}",
+          "meaning": "空气源热泵耗电",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "E_{\\mathrm{DC},t,s}",
+          "latex": "E_{\\mathrm{DC},t,s}",
+          "meaning": "数据中心用电",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "E_{\\mathrm{EES},t,s}^{\\mathrm{cha}}",
+          "latex": "E_{\\mathrm{EES},t,s}^{\\mathrm{cha}}",
+          "meaning": "电储能充电",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "charge of storage component"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (15)。正文 §3.2.2；放电在供给侧、充电在需求侧。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "A-PV",
+        "A-WT",
+        "A-GT",
+        "A-FC",
+        "A-ORC",
+        "A-ASHP",
+        "A-STO",
+        "2"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "power balances in the hybrid system"
+    },
+    {
+      "id": "16",
+      "sourceTag": "16",
+      "title": "热量平衡",
+      "module": "优化调度",
+      "submodel": "多能流平衡",
+      "section": "正文 式 (16)",
+      "latex": "Q_{\\mathrm{GT},t,s}+Q_{\\mathrm{FC},t,s}+Q_{\\mathrm{WHB},t,s}+Q_{\\mathrm{GB},t,s}+Q_{\\mathrm{TES},t,s}^{\\mathrm{dis}}=Q_{\\mathrm{ORC},t,s}+Q_{\\mathrm{AHP},t,s}+Q_{\\mathrm{TES},t,s}^{\\mathrm{cha}}",
+      "formulas": [
+        "Q_{\\mathrm{GT},t,s}+Q_{\\mathrm{FC},t,s}+Q_{\\mathrm{WHB},t,s}+Q_{\\mathrm{GB},t,s}+Q_{\\mathrm{TES},t,s}^{\\mathrm{dis}}=Q_{\\mathrm{ORC},t,s}+Q_{\\mathrm{AHP},t,s}+Q_{\\mathrm{TES},t,s}^{\\mathrm{cha}}"
+      ],
+      "description": "热源及热储能放热等于 ORC、AHP 用热及热储能充热。",
+      "note": "热源及热储能放热等于 ORC、AHP 用热及热储能充热。",
+      "symbols": [
+        {
+          "raw": "Q_{\\mathrm{GT},t,s}",
+          "latex": "Q_{\\mathrm{GT},t,s}",
+          "meaning": "燃机余热",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "waste heat utilization of exhaust gas"
+        },
+        {
+          "raw": "Q_{\\mathrm{FC},t,s}",
+          "latex": "Q_{\\mathrm{FC},t,s}",
+          "meaning": "燃料电池余热",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "thermal power output of HFC"
+        },
+        {
+          "raw": "Q_{\\mathrm{WHB},t,s}",
+          "latex": "Q_{\\mathrm{WHB},t,s}",
+          "meaning": "余热锅炉热功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "output thermal power of WHB"
+        },
+        {
+          "raw": "Q_{\\mathrm{GB},t,s}",
+          "latex": "Q_{\\mathrm{GB},t,s}",
+          "meaning": "锅炉热功率",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "output thermal power of GB"
+        },
+        {
+          "raw": "Q_{\\mathrm{TES},t,s}^{\\mathrm{dis}}",
+          "latex": "Q_{\\mathrm{TES},t,s}^{\\mathrm{dis}}",
+          "meaning": "热储能放热",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "discharge of storage component"
+        },
+        {
+          "raw": "Q_{\\mathrm{ORC},t,s}",
+          "latex": "Q_{\\mathrm{ORC},t,s}",
+          "meaning": "ORC 用热",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "input heat"
+        },
+        {
+          "raw": "Q_{\\mathrm{AHP},t,s}",
+          "latex": "Q_{\\mathrm{AHP},t,s}",
+          "meaning": "AHP 用热",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "heat input"
+        },
+        {
+          "raw": "Q_{\\mathrm{TES},t,s}^{\\mathrm{cha}}",
+          "latex": "Q_{\\mathrm{TES},t,s}^{\\mathrm{cha}}",
+          "meaning": "热储能充热",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "charge of storage component"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (16)。正文 §3.2.2。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "A-GT",
+        "A-FC",
+        "A-WHB",
+        "A-GB",
+        "A-ORC",
+        "A-AHP",
+        "A-STO"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": []
+    },
+    {
+      "id": "17",
+      "sourceTag": "17",
+      "title": "冷量平衡",
+      "module": "优化调度",
+      "submodel": "多能流平衡",
+      "section": "正文 式 (17)",
+      "latex": "Q_{c,\\mathrm{ASHP},t,s}+Q_{c,\\mathrm{AHP},t,s}=Q_{c,\\mathrm{DC},t,s}",
+      "formulas": [
+        "Q_{c,\\mathrm{ASHP},t,s}+Q_{c,\\mathrm{AHP},t,s}=Q_{c,\\mathrm{DC},t,s}"
+      ],
+      "description": "空气源和吸收式热泵供冷满足数据中心冷却需求。",
+      "note": "空气源和吸收式热泵供冷满足数据中心冷却需求。",
+      "symbols": [
+        {
+          "raw": "Q_{c,\\mathrm{ASHP},t,s}",
+          "latex": "Q_{c,\\mathrm{ASHP},t,s}",
+          "meaning": "空气源热泵供冷",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "Q_{c,\\mathrm{AHP},t,s}",
+          "latex": "Q_{c,\\mathrm{AHP},t,s}",
+          "meaning": "吸收式热泵供冷",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "Q_{c,\\mathrm{DC},t,s}",
+          "latex": "Q_{c,\\mathrm{DC},t,s}",
+          "meaning": "数据中心冷负荷",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (17)。正文 §3.2.2。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "A-ASHP",
+        "A-AHP",
+        "4"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": []
+    },
+    {
+      "id": "18",
+      "sourceTag": "18",
+      "title": "天然气平衡",
+      "module": "优化调度",
+      "submodel": "多能流平衡",
+      "section": "正文 式 (18)",
+      "latex": "F_{\\mathrm{pipe},t,s}+F_{\\mathrm{GS},t,s}^{\\mathrm{dis}}=F_{\\mathrm{GT},t,s}+F_{\\mathrm{GB},t,s}+F_{\\mathrm{GS},t,s}^{\\mathrm{cha}}",
+      "formulas": [
+        "F_{\\mathrm{pipe},t,s}+F_{\\mathrm{GS},t,s}^{\\mathrm{dis}}=F_{\\mathrm{GT},t,s}+F_{\\mathrm{GB},t,s}+F_{\\mathrm{GS},t,s}^{\\mathrm{cha}}"
+      ],
+      "description": "管网购气和储气放气满足燃机、锅炉与储气充气。",
+      "note": "管网购气和储气放气满足燃机、锅炉与储气充气。",
+      "symbols": [
+        {
+          "raw": "F_{\\mathrm{pipe},t,s}",
+          "latex": "F_{\\mathrm{pipe},t,s}",
+          "meaning": "管网购气",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "purchased natural gas"
+        },
+        {
+          "raw": "F_{\\mathrm{GS},t,s}^{\\mathrm{dis}}",
+          "latex": "F_{\\mathrm{GS},t,s}^{\\mathrm{dis}}",
+          "meaning": "储气放气",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "discharge of storage component"
+        },
+        {
+          "raw": "F_{\\mathrm{GT},t,s}",
+          "latex": "F_{\\mathrm{GT},t,s}",
+          "meaning": "燃机天然气输入",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "F_{\\mathrm{GB},t,s}",
+          "latex": "F_{\\mathrm{GB},t,s}",
+          "meaning": "锅炉天然气输入",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "F_{\\mathrm{GS},t,s}^{\\mathrm{cha}}",
+          "latex": "F_{\\mathrm{GS},t,s}^{\\mathrm{cha}}",
+          "meaning": "储气充气",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "charge of storage component"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (18)。正文 §3.2.2；原式没有单列 H2G 产气项，按原文保留。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "A-GT",
+        "A-GB",
+        "A-STO"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": []
+    },
+    {
+      "id": "19",
+      "sourceTag": "19",
+      "title": "氢能平衡",
+      "module": "优化调度",
+      "submodel": "多能流平衡",
+      "section": "正文 式 (19)",
+      "latex": "F_{\\mathrm{P2H},t,s}+F_{\\mathrm{HES},t,s}^{\\mathrm{dis}}=F_{\\mathrm{FC},t,s}+F_{\\mathrm{H2G},t,s}+F_{\\mathrm{HES},t,s}^{\\mathrm{cha}}",
+      "formulas": [
+        "F_{\\mathrm{P2H},t,s}+F_{\\mathrm{HES},t,s}^{\\mathrm{dis}}=F_{\\mathrm{FC},t,s}+F_{\\mathrm{H2G},t,s}+F_{\\mathrm{HES},t,s}^{\\mathrm{cha}}"
+      ],
+      "description": "电解产氢和储氢放氢满足燃料电池、甲烷化及储氢充氢。",
+      "note": "电解产氢和储氢放氢满足燃料电池、甲烷化及储氢充氢。",
+      "symbols": [
+        {
+          "raw": "F_{\\mathrm{P2H},t,s}",
+          "latex": "F_{\\mathrm{P2H},t,s}",
+          "meaning": "电解产氢能流",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "F_{\\mathrm{HES},t,s}^{\\mathrm{dis}}",
+          "latex": "F_{\\mathrm{HES},t,s}^{\\mathrm{dis}}",
+          "meaning": "储氢放氢",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "discharge of storage component"
+        },
+        {
+          "raw": "F_{\\mathrm{FC},t,s}",
+          "latex": "F_{\\mathrm{FC},t,s}",
+          "meaning": "燃料电池氢输入",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "hydrogen power of HFC input"
+        },
+        {
+          "raw": "F_{\\mathrm{H2G},t,s}",
+          "latex": "F_{\\mathrm{H2G},t,s}",
+          "meaning": "甲烷化氢输入",
+          "unit": "\\mathrm{kW}",
+          "bounds": []
+        },
+        {
+          "raw": "F_{\\mathrm{HES},t,s}^{\\mathrm{cha}}",
+          "latex": "F_{\\mathrm{HES},t,s}^{\\mathrm{cha}}",
+          "meaning": "储氢充氢",
+          "unit": "\\mathrm{kW}",
+          "bounds": [],
+          "meaningEn": "charge of storage component"
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (19)。正文 §3.2.2。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "A-FC",
+        "A-P2G",
+        "A-STO"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": []
+    },
+    {
+      "id": "20",
+      "sourceTag": "20",
+      "title": "计算任务迁移约束",
+      "module": "优化调度",
+      "submodel": "任务迁移约束",
+      "section": "正文 式 (20)",
+      "latex": "0\\le x_{p,q,i}\\le1",
+      "formulas": [
+        "0\\le x_{p,q,i}\\le1",
+        "\\sum_{q=p}^{T}x_{p,q,i}=1",
+        "0\\le q-p\\le R_i-pt_i"
+      ],
+      "description": "规定任务迁移比例、总任务守恒和允许迁移的时间窗。",
+      "note": "规定任务迁移比例、总任务守恒和允许迁移的时间窗。",
+      "symbols": [
+        {
+          "raw": "x_{p,q,i}",
+          "latex": "x_{p,q,i}",
+          "meaning": "任务 i 从时段 p 移至 q 的比例",
+          "unit": "—",
+          "bounds": [
+            "0\\le x_{p,q,i}\\le 1"
+          ],
+          "meaningEn": "transferred ratio of CTi"
+        },
+        {
+          "raw": "p",
+          "latex": "p",
+          "meaning": "任务原始时段",
+          "unit": "\\text{步}",
+          "bounds": [],
+          "meaningEn": "time p"
+        },
+        {
+          "raw": "q",
+          "latex": "q",
+          "meaning": "迁移后的时段",
+          "unit": "\\text{步}",
+          "bounds": [],
+          "meaningEn": "time q"
+        },
+        {
+          "raw": "T",
+          "latex": "T",
+          "meaning": "调度终止时段",
+          "unit": "\\text{步}",
+          "bounds": []
+        },
+        {
+          "raw": "R_i",
+          "latex": "R_i",
+          "meaning": "可调度范围",
+          "unit": "\\mathrm{h}",
+          "bounds": [],
+          "meaningEn": "scheduling ranges"
+        },
+        {
+          "raw": "pt_i",
+          "latex": "pt_i",
+          "meaning": "任务处理时长",
+          "unit": "\\mathrm{h}",
+          "bounds": []
+        }
+      ],
+      "basis": "来源：Fan 等（2025）正文 式 (20)。正文 §3.2.2；时间窗下界和上界按原式保留。",
+      "references": [
+        {
+          "title": "Fan et al. (2025), Renewable Energy 242: 122466",
+          "url": "https://doi.org/10.1016/j.renene.2025.122466",
+          "citation": "Fan J, Yan R, He Y, et al. Stochastic optimization of combined energy and computation task scheduling strategies of hybrid system with multi-energy storage system and data center[J]. Renewable Energy, 2025, 242: 122466. DOI: 10.1016/j.renene.2025.122466."
+        }
+      ],
+      "status": "文献转录",
+      "derivation": "",
+      "dependencies": [
+        "1",
+        "5",
+        "6"
+      ],
+      "parent": null,
+      "methods": [],
+      "lineRelations": [],
+      "titleEn": "computation tasks follow the constraints"
+    }
+  ]
+}

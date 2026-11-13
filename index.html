@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>公式公告牌 · EquationBillboard</title>
+  <meta name="description" content="按子模型整理的 Fan 等（2025）能源与算力调度公式库">
+  <script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']],packages:{'[+]':['ams']}},svg:{fontCache:'global'}};</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./editor.css">
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div class="brand"><span class="brandmark">∑</span><div><strong>公式公告牌</strong><small>EquationBillboard</small></div></div>
+    <div class="rail-label">子模型导航 <span id="total-count"></span><button id="manage-catalog" type="button" title="管理模块与子模型">管理</button></div>
+    <nav id="modules" aria-label="子模型"></nav>
+    <div class="rail-bottom"><a class="feedback-button" href="https://f.wps.cn/ksform/h/write/puB58Iqk/" target="_blank" rel="noopener noreferrer">问题反馈 ↗</a></div>
+  </aside>
+  <main class="main">
+    <header class="top top-bar">
+      <nav class="view-nav" id="view-nav" aria-label="功能页面"><button type="button" data-view="formulas" class="active">公式</button><button type="button" data-view="catalog">公式目录</button><button type="button" data-view="symbols">符号与参数</button><button type="button" data-view="sources">来源与版本</button><button type="button" data-view="audit">识别勘误</button><button type="button" data-view="options" class="options-gear" aria-label="选项" title="选项">⚙</button></nav>
+      <div class="top-actions"><button id="project-open" class="ghost" type="button">项目与登录</button><button id="image-tool" class="ghost" type="button">图片转 LaTeX</button><button id="export" class="ghost">↓ 导出备份</button><label class="ghost file-button">↑ 导入备份<input id="import" type="file" accept="application/json" hidden></label><button id="add" class="primary">＋ 新建公式</button></div>
+    </header>
+    <section id="workspace-view" class="workspace-view" hidden></section>
+    <section class="toolbar"><div class="search-wrap"><span>⌕</span><input id="search" type="search" placeholder="搜索编号、名称、符号、关键词……" aria-label="搜索公式"><kbd>搜索</kbd></div><span class="results" id="results"></span></section>
+    <section id="cards" class="cards" aria-live="polite"></section>
+    <footer>EquationBillboard</footer>
+  </main>
+</div>
+<dialog id="editor"><form id="edit-form">
+  <div class="dialog-close-anchor"><button type="button" id="close" class="icon" aria-label="关闭编辑器">×</button></div>
+  <div class="editor-top"><div class="dialog-head"><div><small>FORMULA EDITOR</small><h2 id="editor-title">编辑公式</h2></div><div class="editor-top-actions"><button id="add-method" type="button" class="editor-small">＋ 增加同级公式</button></div></div>
+  <div id="editor-method-switch" class="editor-method-switch" hidden><label>同级公式<select id="editor-method-select" aria-label="切换同级公式"></select></label><label>选项名称<input id="editor-method-name" type="text" placeholder="例如：实测功率直接输入"></label><button id="remove-method" type="button" class="danger">删除当前选项</button></div></div>
+  <div class="form-grid">
+    <div class="editor-meta-row"><label>编号<input name="id" readonly aria-description="按公式目录顺序自动编号"></label><label>输入来源公式编号<input name="dependencies" inputmode="numeric" placeholder="多个编号用逗号分隔"></label>
+    <div class="editor-field"><label for="editor-module-input">模块</label><div id="editor-module-combo" class="editor-combobox"><input id="editor-module-input" name="module" required autocomplete="off" placeholder="选择或输入模块" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="editor-module-options"><button type="button" class="editor-combo-toggle" aria-label="展开模块列表">▾</button><div id="editor-module-options" class="editor-combo-options" role="listbox" hidden></div></div></div>
+    <div class="editor-field"><label for="editor-submodel-input">子模型</label><div id="editor-submodel-combo" class="editor-combobox"><input id="editor-submodel-input" name="submodel" required autocomplete="off" placeholder="选择或输入子模型" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="editor-submodel-options"><button type="button" class="editor-combo-toggle" aria-label="展开子模型列表">▾</button><div id="editor-submodel-options" class="editor-combo-options" role="listbox" hidden></div></div></div></div>
+    <div class="editor-title-row"><label>公式名称（中文）<input name="title" required placeholder="例如：光伏出力与电池板温度"></label><label>英文原文标题<input name="titleEn" placeholder="填写论文或补充材料中的原词"></label></div>
+    <datalist id="editor-unit-options"><option value="—"><option value="\mathrm{kW}"><option value="\mathrm{kWh}"><option value="\mathrm{kg}"><option value="\mathrm{kg}/\mathrm{h}"><option value="\mathrm{m}^{3}"><option value="\mathrm{m}^{3}/\mathrm{h}"><option value="\mathrm{m}/\mathrm{s}"><option value="{}^{\circ}\mathrm{C}"><option value="\mathrm{h}"><option value="\text{步}"><option value="\mathrm{USD}"><option value="\mathrm{USD}/\mathrm{kWh}"><option value="\mathrm{kg}\,\mathrm{CO}_{2}"></datalist>
+    <div class="full editor-section"><div class="editor-section-head"><strong>LaTeX 公式</strong><span>每行一式，在同一卡片中分行展示</span></div><textarea name="latex" rows="5" required spellcheck="false" aria-label="LaTeX 公式"></textarea><div class="editor-inline-tools"><label class="editor-file">选择公式图片<input id="editor-image" type="file" accept="image/*" hidden></label><button id="editor-paste-image" type="button" class="editor-small">▣ 剪贴板图片</button><span id="editor-ocr-state" aria-live="polite">选择或粘贴图片后自动识别</span><button id="editor-upright-fix" type="button" class="ocr-upright-alert" aria-label="将建议的角标改为正体" hidden>!</button></div><p class="editor-help">使用开源公式专用模型识别。建议每张图片只截取一条公式；首次识别需要下载模型，生成后请对照原图核对。</p><div id="editor-formula-preview" class="editor-formula-preview"></div><label>主公式解释<textarea name="note" rows="2" placeholder="显示在标题下方的蓝色说明区"></textarea></label><div id="editor-subformulas" class="editor-subformulas" hidden></div></div>
+    <div class="full editor-section"><div class="editor-section-head"><strong>符号与参数</strong><div><button type="button" id="editor-auto-symbols" class="editor-small">按公式顺序识别参数</button> <button type="button" id="editor-translate-symbols" class="editor-small">一键英译中</button> <button type="button" id="add-symbol-row" class="editor-small">＋ 添加参数</button></div></div><div class="editor-inline-tools"><input id="symbol-library-search" type="search" placeholder="搜索已有符号或含义，点击结果复用" aria-label="搜索已有符号"><span>填写英文后可一键补充空白中文；相近已有参数会显示参考译名。</span></div><p id="editor-translate-status" class="editor-help" aria-live="polite">未匹配的英文将发送至 MyMemory 翻译服务；译文请对照论文核查，现有中文不会被覆盖。</p><div id="symbol-library-results" class="editor-library-results"></div><div class="editor-row-head symbol-row-head"><span>LaTeX 符号</span><span>中文含义</span><span>英文原词</span><span>单位</span><span>取值范围</span><span></span></div><div id="editor-symbol-rows" class="editor-rows"></div></div>
+    <label class="full">依据与边界<textarea name="basis" rows="4"></textarea></label>
+    <label class="full">推导说明<textarea name="derivation" rows="3"></textarea></label>
+    <div class="full editor-section"><div class="editor-section-head"><strong>参考文献</strong><div><button type="button" id="editor-use-source" class="editor-small">引用已导入论文</button> <button type="button" id="add-reference-row" class="editor-small">＋ 添加文献</button></div></div><div class="editor-inline-tools"><input id="reference-query" type="search" placeholder="粘贴 DOI、论文标题或网页链接" aria-label="识别文献的 DOI、标题或链接"><button id="reference-lookup" type="button" class="editor-small">识别文献</button></div><p class="editor-help">DOI 或标题将检索 Crossref；“引用已导入论文”会填入本公式库来源，仍需核对新公式是否确实来自该文献。</p><div id="reference-results" class="reference-results" aria-live="polite"></div><div class="editor-row-head reference-row-head"><span>标题</span><span>链接</span><span>参考文献格式</span><span></span></div><div id="editor-reference-rows" class="editor-rows"></div></div>
+  </div>
+  <div class="dialog-actions"><button id="delete" type="button" class="danger">删除此条</button><span></span><button id="cancel" type="button" class="ghost">取消</button><button type="submit" class="primary">保存公式</button></div>
+</form></dialog>
+<dialog id="catalog-editor" class="catalog-dialog"><div class="dialog-close-anchor"><button type="button" id="close-catalog" class="icon" aria-label="关闭导航管理">×</button></div><div class="dialog-head"><div><small>MODEL NAVIGATION</small><h2>管理模块与子模型</h2></div></div><p class="catalog-hint">拖动左侧把手可调整模块顺序，或在同一模块内调整子模型顺序。改名会同步更新公式归属；删除目录时，公式会移至“未分类”。</p><div id="catalog-list"></div><button id="add-module" type="button" class="primary">＋ 添加模块</button></dialog>
+<script src="./latex-source.js"></script>
+<script src="./notation.js"></script>
+<script src="./unit-latex.js"></script>
+<script src="./symbol-match.js"></script>
+<script src="./symbol-extract.js"></script>
+<script src="./module-migration.js"></script>
+<script src="./notation-migration.js"></script>
+<script src="./bilingual-migration.js"></script>
+<script src="./english-display.js"></script>
+<script src="./app.js"></script>
+<script src="./ocr-cleanup.js"></script>
+<script src="./ocr-upright.js"></script>
+<script src="./formula-ocr.js"></script>
+<script src="./features.js"></script>
+<script src="./symbol-translation.js"></script>
+<script src="./editor-ui.js"></script>
+<script src="./editor-variants.js"></script>
+<script src="./catalog-batch.js"></script>
+<script src="./project-ui.js"></script>
+</body></html>
