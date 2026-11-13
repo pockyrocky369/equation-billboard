@@ -81,6 +81,10 @@
       const delimiters = masked.replace(/\\(left|right)\s*\\\\(?=[{}|()[\].])/g, '\\$1\\');
       let result = removeStrayEdgeBars(repairDelimiterCommands(compactMathSpace(delimiters).replace(/\\!/g, '').replace(/\\</g, '<').replace(/\\>/g, '>')));
       result = repairArrayColumns(result);
+      // MathJax cannot match \left and \right across array cells or environments.
+      // OCR often places them on opposite sides of a nested array. Keep the
+      // visible delimiters, but drop their sizing commands in array drafts.
+      if (result.includes('\\begin{array}')) result = result.replace(/\\(?:left|right)\s*\\?\./g, '').replace(/\\(?:left|right|middle)(?![A-Za-z])/g, '');
       result = result.replace(/\uE000(\d+)\uE001/g, (_, index) => saved[Number(index)]);
       return result;
     }).filter(Boolean).join('\n');
