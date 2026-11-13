@@ -66,6 +66,13 @@
     return source;
   }
 
+  function repairArrayColumns(source) {
+    return source.replace(/\\begin\{array\}\{([clr]+)\}((?:(?!\\begin\{array\})[\s\S])*?)\\end\{array\}/g, (whole, columns, body) => {
+      const needed = Math.max(...body.split(/\\\\/).map(row => (row.match(/&/g) || []).length + 1));
+      return needed > columns.length ? whole.replace(`{${columns}}`, `{${columns}${columns.at(-1).repeat(needed - columns.length)}}`) : whole;
+    });
+  }
+
   function cleanOcrLatex(raw) {
     return String(raw || '').replace(/\r\n?/g, '\n').split('\n').map(line => {
       const { masked, saved } = preserveTextGroups(line.trim());
@@ -73,6 +80,7 @@
       // turning the delimiter into a line break and leaving an unmatched \right.
       const delimiters = masked.replace(/\\(left|right)\s*\\\\(?=[{}|()[\].])/g, '\\$1\\');
       let result = removeStrayEdgeBars(repairDelimiterCommands(compactMathSpace(delimiters).replace(/\\!/g, '').replace(/\\</g, '<').replace(/\\>/g, '>')));
+      result = repairArrayColumns(result);
       result = result.replace(/\uE000(\d+)\uE001/g, (_, index) => saved[Number(index)]);
       return result;
     }).filter(Boolean).join('\n');
