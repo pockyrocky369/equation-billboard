@@ -69,7 +69,10 @@
   function cleanOcrLatex(raw) {
     return String(raw || '').replace(/\r\n?/g, '\n').split('\n').map(line => {
       const { masked, saved } = preserveTextGroups(line.trim());
-      let result = removeStrayEdgeBars(repairDelimiterCommands(compactMathSpace(masked).replace(/\\!/g, '')));
+      // OCR sometimes doubles the slash before a \left/\right delimiter,
+      // turning the delimiter into a line break and leaving an unmatched \right.
+      const delimiters = masked.replace(/\\(left|right)\s*\\\\(?=[{}|()[\].])/g, '\\$1\\');
+      let result = removeStrayEdgeBars(repairDelimiterCommands(compactMathSpace(delimiters).replace(/\\!/g, '').replace(/\\</g, '<').replace(/\\>/g, '>')));
       result = result.replace(/\uE000(\d+)\uE001/g, (_, index) => saved[Number(index)]);
       return result;
     }).filter(Boolean).join('\n');
@@ -78,3 +81,4 @@
   root.cleanOcrLatex = cleanOcrLatex;
   if (typeof module !== 'undefined' && module.exports) module.exports = cleanOcrLatex;
 })(typeof window === 'undefined' ? globalThis : window);
+
