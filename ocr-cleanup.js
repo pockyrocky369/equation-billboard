@@ -73,6 +73,23 @@
     });
   }
 
+  function stretchArrayBraces(source) {
+    const starts = [...source.matchAll(/\\\{(?=\\begin\{array\})/g)].map(match => match.index).reverse();
+    for (const start of starts) {
+      const tokens = /\\(?:begin|end)\{array\}/g;
+      tokens.lastIndex = start + 2;
+      let depth = 0, end = -1, token;
+      while ((token = tokens.exec(source))) {
+        depth += token[0].startsWith('\\begin') ? 1 : -1;
+        if (depth === 0) { end = tokens.lastIndex; break; }
+      }
+      if (end < 0) continue;
+      source = source.slice(0, end) + '\\right.' + source.slice(end);
+      source = source.slice(0, start) + '\\left\\{' + source.slice(start + 2);
+    }
+    return source;
+  }
+
   function cleanOcrLatex(raw) {
     return String(raw || '').replace(/\r\n?/g, '\n').split('\n').map(line => {
       const { masked, saved } = preserveTextGroups(line.trim());
@@ -84,7 +101,11 @@
       // MathJax cannot match \left and \right across array cells or environments.
       // OCR often places them on opposite sides of a nested array. Keep the
       // visible delimiters, but drop their sizing commands in array drafts.
-      if (result.includes('\\begin{array}')) result = result.replace(/\\(?:left|right)\s*\\?\./g, '').replace(/\\(?:left|right|middle)(?![A-Za-z])/g, '');
+      if (result.includes('\\begin{array}')) {
+        result = result.replace(/(\\begin\{array\}\{r\}\{)\\left\|/, '$1').replace(/\\right\\\|(?=\}\s*\\end\{array\})/g, '');
+        result = result.replace(/\\(?:left|right)\s*\\?\./g, '').replace(/\\(?:left|right|middle)(?![A-Za-z])/g, '');
+        result = stretchArrayBraces(result);
+      }
       result = result.replace(/\uE000(\d+)\uE001/g, (_, index) => saved[Number(index)]);
       return result;
     }).filter(Boolean).join('\n');
